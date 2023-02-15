@@ -60,8 +60,8 @@ const FormCreate = (props: Props) => {
 
     return (
         <div className="flex flex-row justify-between">
-            <div className="flex flex-col flex-1 items-center">
-                Form Create
+            <div className="flex flex-col flex-1 items-center py-5">
+                <h1 className="text-xl font-bold mb-10">New Form</h1>
                 <form className="flex flex-col gap-4 w-full pr-7">
                     <div>
                         <div className="mb-2 block">
@@ -89,10 +89,11 @@ const FormCreate = (props: Props) => {
                         </DndContext>
                         {fields.length === 0 ? <div className="text-center opacity-50 w-full">Add Inputs from right pane <span className="text-xl leading-none">→</span></div> : ""}
                     </div>
+                    <Button type="submit">+ Submit Form</Button>
                 </form>
             </div>
-            <div className="flex flex-col w-2/6">
-                <h1 className="mb-8">Form Inputs</h1>
+            <div className="flex flex-col w-2/6 bg-gray-100 rounded-3xl py-5 px-6">
+                <h1 className="mb-8 text-xl font-bold text-center">Form Inputs</h1>
                 <Button className="mb-4" pill={true} gradientDuoTone="purpleToBlue" outline={true} onClick={onInputAdd}><b className="text-xl leading-none">+</b> Add Text Input</Button>
                 <Button className="mb-4" pill={true} gradientDuoTone="purpleToBlue" outline={true} onClick={onInputAdd}><b className="text-xl leading-none">+</b> Add Number Input</Button>
                 <Button className="mb-4" pill={true} gradientDuoTone="purpleToBlue" outline={true} onClick={onInputAdd}><b className="text-xl leading-none">+</b> Add Textarea/HTML Input</Button>
