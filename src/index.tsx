@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import FormCreate from "./features/forms/FormCreate";
 import FormDisplay, {
-  loader as formLoader,
+  loader as formDisplayLoader,
 } from "./features/forms/FormDisplay";
 import FormsList from "./features/forms/FormsList";
 import Root from "./features/root";
@@ -29,9 +29,17 @@ const router = createBrowserRouter([
         element: <FormCreate />
       },
       {
+        path: "/forms/edit",
+        element: <FormCreate />,
+      },
+      {
+        path: "/forms/edit/:formId",
+        element: <FormCreate />,
+      },
+      {
         path: "/forms/display/:formId",
         element: <FormDisplay />,
-        loader: formLoader
+        loader: formDisplayLoader
       },
       {
         path: "/services",

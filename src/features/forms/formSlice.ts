@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Form } from "./types";
+import { RootState } from "../../app/store";
+import { FormType } from "./types";
 
 export interface FormsState {
-  list: Form[];
+  list: FormType[];
 }
 
 const initialState: FormsState = {
@@ -13,14 +14,26 @@ export const formsSlice = createSlice({
   name: "forms",
   initialState,
   reducers: {
-    addForm: (state, action: PayloadAction<Form>) => {
-      const newForms = [...state.list, action.payload];
-      return { ...state, list: newForms };
+    addForm: (state, action: PayloadAction<FormType>) => {
+      return {
+        ...state,
+        list: [...state.list, action.payload],
+      };
     },
-    // getForm: (state, action: PayloadAction<number>) => {
-    //   return state.forms.find((form) => form.id === action.payload);
-    // }
+    updateForm: (state, action: PayloadAction<FormType>) => {
+      const formIndex = state.list.findIndex(
+        (form) => form.id === action.payload.id
+      );
+      const listCopy = [...state.list];
+      listCopy[formIndex] = action.payload;
+      return { ...state, list: listCopy };
+    },
   },
 });
+
+export const selectFormById = (state: RootState, formId: string) =>
+  state.forms.list.find((form) => form.id === formId);
+
+export const { addForm, updateForm } = formsSlice.actions;
 
 export default formsSlice.reducer;

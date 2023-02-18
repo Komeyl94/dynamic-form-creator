@@ -1,23 +1,73 @@
-import { TextInputProps } from 'flowbite-react';
-
 export type FormFieldTypes = "number" | "text" | "textarea" | "date" | "daterange" | "select" | "radio" | "checkbox";
+
+export type TextNumberInputProps = {
+    placeholder?: string;
+    required: boolean;
+    minLength?: number;
+    maxLength?: number;
+    min?: number;
+    max?: number;
+}
+
+export type SelectInputOption = {
+    key: string;
+    value: string;
+}
+
+export type SelectInputProps = {
+    options: SelectInputOption[];
+    required: boolean;
+}
+
+export type RadioInputOption = {
+    label: string;
+    checked: boolean;
+}
+
+export type RadioInputProps = {
+    options: RadioInputOption[];
+    required: boolean;
+}
+
+export type CheckboxInputOption = {
+    label: string;
+    checked: boolean;
+}
+
+export type CheckboxInputProps = {
+    options: CheckboxInputOption[];
+    required: boolean;
+}
+
+export type DateInputProps = {
+    placeholder?: string;
+    required: boolean;
+}
+export type DateRangeInputProps = {
+    startDate: Date;
+    endDate: Date;
+    placeholder?: string;
+    required: boolean;
+}
+
+export type FormFieldInputProps = TextNumberInputProps | SelectInputProps | DateInputProps | DateRangeInputProps | RadioInputProps | CheckboxInputProps;
 
 export type FormField = {
     id: string;
-    inputProps: TextInputProps;
-    type?: FormFieldTypes;
-    name?: string;
+    inputProps: FormFieldInputProps;
+    type: FormFieldTypes;
+    name: string;
     label: string;
     description: string;
-    permission: string;
-    validate: string;
+    permissions: string;
+    validations: string;
     formatting: string;
 }
 
-export type Form = {
+export type FormType = {
     id: string;
     name: string;
-    display: string;
+    description: string;
     fields: FormField[];
     beforeInit?: () => {};
     afterInit?: () => {};

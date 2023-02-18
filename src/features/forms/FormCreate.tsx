@@ -1,109 +1,192 @@
-import { Textarea, TextInput } from "flowbite-react"
+import { Dropdown, Spinner, Textarea, TextInput } from "flowbite-react"
 import { Button, Label } from "flowbite-react"
-import { useState } from "react"
-import { DndContext } from '@dnd-kit/core';
-import { SortableContext, rectSwappingStrategy, arrayMove } from '@dnd-kit/sortable';
-import { MeasuringStrategy } from '@dnd-kit/core';
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext } from '@dnd-kit/sortable';
 import { SortableItem } from "./components/SortableItem";
-import { Form, FormField } from "./types";
+import { FormType } from "./types";
+import { Formik, Form, Field, ErrorMessage, FieldProps, FieldArray, ArrayHelpers } from 'formik';
+import { useAppDispatch } from "../../app/hooks";
+import { addForm, selectFormById, updateForm } from "./formSlice";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { v5 as uuidv5 } from "uuid";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
+import { emptyTextInputObj, emptyNumberInputObj } from "./utils";
 
-const measuringConfig = {
-    droppable: {
-        strategy: MeasuringStrategy.WhileDragging,
+const UUID_NAMESPACE = "7aa1a8bc-1f25-494e-afbf-af9bf9a00db5";
+
+const FormCreate = () => {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const { formId } = useParams();
+    const location = useLocation();
+    const isEdit = location.pathname.startsWith("/forms/edit") && formId;
+    const formInState = useSelector<RootState, FormType | undefined>((state) => selectFormById(state, formId || ""));
+
+    console.log('formInState', formInState)
+    const timestamp = String(new Date().valueOf());
+    const formUUID = uuidv5(timestamp, UUID_NAMESPACE);
+
+    const initialValues: FormType = formInState || { id: formUUID, name: "", description: "", fields: [] };
+
+    useEffect(() => {
+        if (!isEdit) {
+            navigate("/forms/add", { replace: true })
+        }
+    }, [isEdit, navigate])
+
+    const addTextInput = (arrayHelpers: ArrayHelpers) => {
+        const time = String(new Date().valueOf());
+        arrayHelpers.push({ ...emptyTextInputObj, id: uuidv5(time, UUID_NAMESPACE) })
     }
-}
 
-type Props = {}
-
-const FormCreate = (props: Props) => {
-    const [form] = useState<Form>({
-        display: "display text",
-        fields: [],
-        id: String(1),
-        name: ""
-    });
-    const [fields, setFields] = useState<FormField[]>([]);
-
-    const onInputAdd = () => {
-        const newFields = [...fields];
-        const random = Math.floor(Math.random() * (10000 - 10 + 1) + 10);
-        newFields.push(
-            {
-                id: String(fields.length + random),
-                description: "",
-                label: "",
-                formatting: "",
-                inputProps: {},
-                permission: "",
-                validate: ""
-            })
-        setFields(newFields);
+    const addNumberInput = (arrayHelpers: ArrayHelpers) => {
+        const time = String(new Date().valueOf());
+        arrayHelpers.push({ ...emptyNumberInputObj, id: uuidv5(time, UUID_NAMESPACE) })
     }
 
-    const handleDragEnd = (event: { active: any; over: any; }) => {
-        const { active, over } = event;
-
-        if (active.id !== over.id) {
-            setFields((fields) => {
-                const oldIndex = fields.findIndex(field => active.id === field.id);
-                const newIndex = fields.findIndex(field => over.id === field.id);
-
-                return arrayMove(fields, oldIndex, newIndex);
-            });
+    const handleDragEnd = (event: DragEndEvent, arrayHelpers: ArrayHelpers) => {
+        if (event.active.data.current && event.over) {
+            arrayHelpers.swap(event.active.data.current.sortable.index, event.over.data.current?.sortable.index);
         }
     };
 
-    const removeInput = (id: string) => {
-        const newFields = fields.filter((field) => field.id !== id);
-        setFields(newFields);
+    const removeInput = (index: number, arrayHelpers: ArrayHelpers) => {
+        arrayHelpers.remove(index);
     };
 
     return (
-        <div className="flex flex-row justify-between">
-            <div className="flex flex-col flex-1 items-center py-5">
-                <h1 className="text-xl font-bold mb-10">New Form</h1>
-                <form className="flex flex-col gap-4 w-full pr-7">
-                    <div>
-                        <div className="mb-2 block">
-                            <Label
-                                htmlFor="form-name"
-                                value="Form name"
-                            />
-                        </div>
-                        <TextInput type="text" id="form-name" placeholder="Enter form name" />
+        <Formik
+            initialValues={initialValues}
+            enableReinitialize
+            validate={values => {
+                const errors = {};
+                return errors;
+            }}
+            onSubmit={(values, { setSubmitting }) => {
+                setTimeout(() => {
+                    setSubmitting(false);
+                    console.log(JSON.stringify(values, null, 2));
+                    if (isEdit) {
+                        dispatch(updateForm(values));
+                    } else {
+                        dispatch(addForm(values));
+                    }
+                    navigate(-1);
+                }, 400);
+            }}
+        >
+            {({ values, isSubmitting, setFieldValue }) => (
+                <div className="flex flex-row justify-between">
+                    <div className="flex flex-col flex-1 items-center py-5">
+                        <h1 className="text-xl font-bold mb-10">{isEdit ? "Update Form" : "New Form"}</h1>
+                        <Form className="flex flex-col gap-4 w-full pr-7">
+                            <div>
+                                <div className="mb-2 block">
+                                    <Label
+                                        htmlFor="name"
+                                        value="Form name"
+                                    />
+                                </div>
+                                <Field name="name">
+                                    {({
+                                        field,
+                                    }: FieldProps) => (
+                                        <TextInput type="text" id="name" placeholder="Enter form name" {...field} />
+                                    )}
+                                </Field>
+                                <ErrorMessage name="name" component="div" />
+                            </div>
+                            <div>
+                                <div className="mb-2 block">
+                                    <Label
+                                        htmlFor="description"
+                                        value="Form description"
+                                    />
+                                </div>
+                                <Field name="description">
+                                    {({
+                                        field,
+                                    }: FieldProps) => (
+                                        <Textarea id="description" placeholder="Enter form description" {...field} />
+                                    )}
+                                </Field>
+                                <ErrorMessage name="description" component="div" />
+                            </div>
+                            <FieldArray name="fields">
+                                {(arrayHelpers: ArrayHelpers) => (
+                                    <div className="flex flex-col">
+                                        <div className="bg-slate-200 px-4 py-6 rounded-xl flex flex-col mb-2">
+                                            <DndContext onDragEnd={(e) => handleDragEnd(e, arrayHelpers)}>
+                                                <SortableContext items={values.fields} id={values.id}>
+                                                    {values.fields.length > 0 &&
+                                                        values.fields.map((field, index) => (
+                                                            <SortableItem
+                                                                key={field.id}
+                                                                index={index}
+                                                                field={field}
+                                                                removeInput={(i) => removeInput(i, arrayHelpers)}
+                                                                setFieldValue={setFieldValue}
+                                                            />
+                                                        ))}
+                                                </SortableContext>
+                                            </DndContext>
+                                            {values.fields.length === 0 ? <div className="text-center opacity-50 w-full">No Inputs Yet!</div> : ""}
+                                        </div>
+                                        <div className="flex flex-col items-stretch">
+                                            <Dropdown
+                                                label="Add New Field"
+                                                gradientDuoTone="redToYellow"
+                                            >
+                                                <Dropdown.Item onClick={() => addTextInput(arrayHelpers)}>
+                                                    Text Input
+                                                </Dropdown.Item>
+                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                    Number Input
+                                                </Dropdown.Item>
+                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                    Textarea/HTML Input
+                                                </Dropdown.Item>
+                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                    Date Input
+                                                </Dropdown.Item>
+                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                    Date Range Input
+                                                </Dropdown.Item>
+                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                    Select Input
+                                                </Dropdown.Item>
+                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                    Select Input
+                                                </Dropdown.Item>
+                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                    Radio Input
+                                                </Dropdown.Item>
+                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                    Checkbox Input
+                                                </Dropdown.Item>
+                                            </Dropdown>
+                                        </div>
+                                    </div>
+                                )}
+                            </FieldArray>
+                            <Button type="submit" disabled={isSubmitting} className="mt-6" gradientDuoTone="greenToBlue" size="lg">
+                                {isSubmitting ? (
+                                    <><div className="mr-3">
+                                        <Spinner
+                                            size="sm"
+                                            light={true}
+                                        />
+                                    </div>
+                                        Saving ...
+                                    </>) : isEdit ? `✎ Update Form` : `+ Submit Form`}
+                            </Button>
+                        </Form>
                     </div>
-                    <div>
-                        <div className="mb-2 block">
-                            <Label
-                                htmlFor="form-description"
-                                value="Form description"
-                            />
-                        </div>
-                        <Textarea id="form-description" placeholder="Enter form description"></Textarea>
-                    </div>
-                    <div className="bg-slate-200 p-8 rounded-xl flex flex-col">
-                        <DndContext measuring={measuringConfig} onDragEnd={handleDragEnd}>
-                            <SortableContext items={fields} strategy={rectSwappingStrategy} id={form.id}>
-                                {fields.map(field => <SortableItem key={field.id} field={field} removeInput={removeInput} />)}
-                            </SortableContext>
-                        </DndContext>
-                        {fields.length === 0 ? <div className="text-center opacity-50 w-full">Add Inputs from right pane <span className="text-xl leading-none">→</span></div> : ""}
-                    </div>
-                    <Button type="submit">+ Submit Form</Button>
-                </form>
-            </div>
-            <div className="flex flex-col w-2/6 bg-gray-100 rounded-3xl py-5 px-6">
-                <h1 className="mb-8 text-xl font-bold text-center">Form Inputs</h1>
-                <Button className="mb-4" pill={true} gradientDuoTone="purpleToBlue" outline={true} onClick={onInputAdd}><b className="text-xl leading-none">+</b> Add Text Input</Button>
-                <Button className="mb-4" pill={true} gradientDuoTone="purpleToBlue" outline={true} onClick={onInputAdd}><b className="text-xl leading-none">+</b> Add Number Input</Button>
-                <Button className="mb-4" pill={true} gradientDuoTone="purpleToBlue" outline={true} onClick={onInputAdd}><b className="text-xl leading-none">+</b> Add Textarea/HTML Input</Button>
-                <Button className="mb-4" pill={true} gradientDuoTone="purpleToBlue" outline={true} onClick={onInputAdd}><b className="text-xl leading-none">+</b> Add Date Input</Button>
-                <Button className="mb-4" pill={true} gradientDuoTone="purpleToBlue" outline={true} onClick={onInputAdd}><b className="text-xl leading-none">+</b> Add Date Range Input</Button>
-                <Button className="mb-4" pill={true} gradientDuoTone="purpleToBlue" outline={true} onClick={onInputAdd}><b className="text-xl leading-none">+</b> Add Select Input</Button>
-                <Button className="mb-4" pill={true} gradientDuoTone="purpleToBlue" outline={true} onClick={onInputAdd}><b className="text-xl leading-none">+</b> Add Radio Input</Button>
-                <Button className="mb-4" pill={true} gradientDuoTone="purpleToBlue" outline={true} onClick={onInputAdd}><b className="text-xl leading-none">+</b> Add Checkbox Input</Button>
-            </div>
-        </div>
+                </div>
+            )}
+        </Formik>
     )
 }
 
