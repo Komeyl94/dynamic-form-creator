@@ -14,6 +14,8 @@ import FormDisplay, {
 } from "./features/forms/FormDisplay";
 import FormsList from "./features/forms/FormsList";
 import Root from "./features/root";
+import PermissionsList from "./features/permissions/PermissionsList";
+import PermissionsAdd from "./features/permissions/PermissionsCreate";
 
 const router = createBrowserRouter([
   {
@@ -51,19 +53,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/permissions",
-        element: <div>Permissions</div>
+        element: <PermissionsList />
       },
       {
-        path: "/permissions/add",
-        element: <div>Add Permissions</div>
+        path: "/permissions/create",
+        element: <PermissionsAdd />
       },
       {
-        path: "/users",
-        element: <div>Users</div>
-      },
-      {
-        path: "/users/add",
-        element: <div>Add User</div>
+        path: "/permissions/edit/:userId",
+        element: <PermissionsAdd />
       },
     ],
   },

@@ -12,7 +12,7 @@ import { v5 as uuidv5 } from "uuid";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import { emptyTextInputObj, emptyNumberInputObj } from "./utils";
+import { emptyTextInputObj, emptyNumberInputObj, emptyHTMLInputObj, emptyDateInputObj } from "./utils";
 
 const UUID_NAMESPACE = "7aa1a8bc-1f25-494e-afbf-af9bf9a00db5";
 
@@ -24,7 +24,6 @@ const FormCreate = () => {
     const isEdit = location.pathname.startsWith("/forms/edit") && formId;
     const formInState = useSelector<RootState, FormType | undefined>((state) => selectFormById(state, formId || ""));
 
-    console.log('formInState', formInState)
     const timestamp = String(new Date().valueOf());
     const formUUID = uuidv5(timestamp, UUID_NAMESPACE);
 
@@ -44,6 +43,16 @@ const FormCreate = () => {
     const addNumberInput = (arrayHelpers: ArrayHelpers) => {
         const time = String(new Date().valueOf());
         arrayHelpers.push({ ...emptyNumberInputObj, id: uuidv5(time, UUID_NAMESPACE) })
+    }
+
+    const addHTMLInput = (arrayHelpers: ArrayHelpers) => {
+        const time = String(new Date().valueOf());
+        arrayHelpers.push({ ...emptyHTMLInputObj, id: uuidv5(time, UUID_NAMESPACE) })
+    }
+
+    const addDateInput = (arrayHelpers: ArrayHelpers) => {
+        const time = String(new Date().valueOf());
+        arrayHelpers.push({ ...emptyDateInputObj, id: uuidv5(time, UUID_NAMESPACE) })
     }
 
     const handleDragEnd = (event: DragEndEvent, arrayHelpers: ArrayHelpers) => {
@@ -145,10 +154,10 @@ const FormCreate = () => {
                                                 <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
                                                     Number Input
                                                 </Dropdown.Item>
-                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                <Dropdown.Item onClick={() => addHTMLInput(arrayHelpers)}>
                                                     Textarea/HTML Input
                                                 </Dropdown.Item>
-                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                <Dropdown.Item onClick={() => addDateInput(arrayHelpers)}>
                                                     Date Input
                                                 </Dropdown.Item>
                                                 <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>

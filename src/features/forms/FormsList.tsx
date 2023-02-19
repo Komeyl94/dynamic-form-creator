@@ -1,9 +1,14 @@
-import React from 'react'
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { Button, Table } from "flowbite-react";
+import { deleteForm } from "./formSlice";
 
 const FormsList = () => {
-  const forms = useAppSelector((state) => state.forms.list);
+    const dispatch = useAppDispatch();
+    const forms = useAppSelector((state) => state.forms.list);
+
+  const removeForm = (id: string) => {
+    dispatch(deleteForm(id));
+}
 
   if (forms) {
     return (<div>
@@ -27,7 +32,7 @@ const FormsList = () => {
         </Table.Head>
         <Table.Body className="divide-y">
           {
-            forms.map((form, index) => {
+            forms.length > 0 ? forms.map((form, index) => {
               return (
                 <Table.Row key={form.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
@@ -46,10 +51,16 @@ const FormsList = () => {
                     >
                       Edit
                     </a>
+                    <span
+                      onClick={() => removeForm(form.id)}
+                      className="font-medium cursor-pointer mx-2 text-blue-600 hover:underline dark:text-blue-500"
+                    >
+                      Delete
+                    </span>
                   </Table.Cell>
                 </Table.Row>
               );
-            })
+            }) : <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800"><Table.Cell>No Data</Table.Cell></Table.Row>
           }
         </Table.Body>
       </Table>

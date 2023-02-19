@@ -1,4 +1,4 @@
-export type FormFieldTypes = "number" | "text" | "textarea" | "date" | "daterange" | "select" | "radio" | "checkbox";
+export type FormFieldTypes = "number" | "text" | "html" | "date" | "daterange" | "select" | "radio" | "checkbox";
 
 export type TextNumberInputProps = {
     placeholder?: string;
@@ -59,7 +59,7 @@ export type FormField = {
     name: string;
     label: string;
     description: string;
-    permissions: string;
+    permissions: string[];
     validations: string;
     formatting: string;
 }

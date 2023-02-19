@@ -22,7 +22,7 @@ const FormDisplay = () => {
             const components = {
               "text": Text,
               "number": Number,
-              "textarea": Number,
+              "html": Number,
               "date": Number,
               "daterange": Number,
               "select": Number,

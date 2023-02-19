@@ -4,6 +4,8 @@ import { CSS } from '@dnd-kit/utilities';
 import { FormField } from "../types";
 import TextEdit from './edit/TextEdit';
 import NumberEdit from './edit/NumberEdit';
+import HTMLEdit from './edit/HTMLEdit';
+import DateEdit from './edit/DateEdit';
 import { Button } from "flowbite-react";
 
 type SortableItemProps = {
@@ -32,8 +34,8 @@ export function SortableItem({ index, field, removeInput, setFieldValue }: Sorta
     const components = {
         "text": TextEdit,
         "number": NumberEdit,
-        "textarea": TextEdit,
-        "date": TextEdit,
+        "html": HTMLEdit,
+        "date": DateEdit,
         "daterange": TextEdit,
         "select": TextEdit,
         "radio": TextEdit,

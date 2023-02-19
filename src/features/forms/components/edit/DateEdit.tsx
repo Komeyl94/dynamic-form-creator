@@ -1,11 +1,11 @@
-import { Checkbox, Dropdown, Label, TextInput } from "flowbite-react";
+import { Button, Checkbox, Dropdown, Label, TextInput } from "flowbite-react";
 import { Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
 import { useAppSelector } from "../../../../app/hooks";
 import { camelCaseToNormal } from "../../../../utils/utilities";
 import { TextNumberInputProps } from "../../types";
 
-type TextInputEditProps = {
+type DateInputEditProps = {
     index: number;
     permissions: string[];
     inputProps: TextNumberInputProps;
@@ -13,32 +13,32 @@ type TextInputEditProps = {
 }
 
 type Validations = {
-    minLength: number | undefined;
-    maxLength: number | undefined;
+    min: number | undefined;
+    max: number | undefined;
 }
 
-const TextInputEdit = ({ index, permissions, inputProps, setFieldValue }: TextInputEditProps) => {
-    const defaultValidationValue = { minLength: inputProps.minLength || undefined, maxLength: inputProps.maxLength || undefined };
+const DateInputEdit = ({ index, permissions, inputProps, setFieldValue }: DateInputEditProps) => {
+    const defaultValidationValue = { min: inputProps.min || undefined, max: inputProps.max || undefined };
     const [validations, setValidations] = useState<Validations>(defaultValidationValue);
     const users = useAppSelector((state) => state.permissions.users);
 
-    const addMinLength = () => {
-        if (validations.minLength === undefined) {
-            setValidations({ ...validations, minLength: 3 });
-            setFieldValue(`fields[${index}].inputProps.minLength`, 3);
+    const addMin = () => {
+        if (validations.min === undefined) {
+            setValidations({ ...validations, min: 3 });
+            setFieldValue(`fields[${index}].inputProps.min`, 3);
         } else {
-            setValidations({ ...validations, minLength: undefined });
-            setFieldValue(`fields[${index}].inputProps.minLength`, undefined);
+            setValidations({ ...validations, min: undefined });
+            setFieldValue(`fields[${index}].inputProps.min`, undefined);
         }
     }
 
-    const addMaxLength = () => {
-        if (validations.maxLength === undefined) {
-            setValidations({ ...validations, maxLength: 16 });
-            setFieldValue(`fields[${index}].inputProps.maxLength`, 16);
+    const addMax = () => {
+        if (validations.max === undefined) {
+            setValidations({ ...validations, max: 16 });
+            setFieldValue(`fields[${index}].inputProps.max`, 16);
         } else {
-            setValidations({ ...validations, maxLength: undefined });
-            setFieldValue(`fields[${index}].inputProps.maxLength`, undefined);
+            setValidations({ ...validations, max: undefined });
+            setFieldValue(`fields[${index}].inputProps.max`, undefined);
         }
     }
 
@@ -52,7 +52,7 @@ const TextInputEdit = ({ index, permissions, inputProps, setFieldValue }: TextIn
 
     return (
         <div className="flex flex-wrap items-stretch my-3 p-5 pt-3 rounded-xl bg-slate-300">
-            <p className="mb-3 text-sm font-medium">Text Input</p>
+            <p className="mb-3 text-sm font-medium">Date Input</p>
             <div className="mb-1 flex w-full">
                 <Field name={`fields[${index}].label`}>
                     {({
@@ -95,20 +95,21 @@ const TextInputEdit = ({ index, permissions, inputProps, setFieldValue }: TextIn
                     Required
                 </Label>
             </div>
-            <div className="flex gap-2 w-full">
+            <div className="flex w-full">
                 <Dropdown
                     label="Add validation"
                     pill={true}
                     color="dark"
                     size="sm"
                 >
-                    <Dropdown.Item onClick={addMinLength}>
-                        {validations.minLength !== undefined ? `✔ ` : ``}Minimum character length
+                    <Dropdown.Item onClick={addMin}>
+                        {validations.min !== undefined ? `✔ ` : ``}Minimum date
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={addMaxLength}>
-                        {validations.maxLength !== undefined ? `✔ ` : ``}Maximum character length
+                    <Dropdown.Item onClick={addMax}>
+                        {validations.max !== undefined ? `✔ ` : ``}Maximum date
                     </Dropdown.Item>
                 </Dropdown>
+                <Button color="dark" size="sm" pill={true} className="mx-1">+ Add Formatting</Button>
                 <Dropdown
                     label="Select Permissions"
                     pill={true}
@@ -135,7 +136,7 @@ const TextInputEdit = ({ index, permissions, inputProps, setFieldValue }: TextIn
                                             field,
                                         }: FieldProps) => (
                                             <TextInput
-                                                type="number"
+                                                type="date"
                                                 className="w-full"
                                                 {...field}
                                             />
@@ -153,4 +154,4 @@ const TextInputEdit = ({ index, permissions, inputProps, setFieldValue }: TextIn
     )
 }
 
-export default TextInputEdit;
+export default DateInputEdit;

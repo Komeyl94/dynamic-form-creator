@@ -1,11 +1,13 @@
 import { Button, Checkbox, Dropdown, Label, TextInput } from "flowbite-react";
 import { Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
+import { useAppSelector } from "../../../../app/hooks";
 import { camelCaseToNormal } from "../../../../utils/utilities";
 import { TextNumberInputProps } from "../../types";
 
 type NumberInputEditProps = {
     index: number;
+    permissions: string[];
     inputProps: TextNumberInputProps;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }
@@ -15,9 +17,10 @@ type Validations = {
     max: number | undefined;
 }
 
-const NumberInputEdit = ({ index, inputProps, setFieldValue }: NumberInputEditProps) => {
+const NumberInputEdit = ({ index, permissions, inputProps, setFieldValue }: NumberInputEditProps) => {
     const defaultValidationValue = { min: inputProps.min || undefined, max: inputProps.max || undefined };
     const [validations, setValidations] = useState<Validations>(defaultValidationValue);
+    const users = useAppSelector((state) => state.permissions.users);
 
     const addMin = () => {
         if (validations.min === undefined) {
@@ -36,6 +39,14 @@ const NumberInputEdit = ({ index, inputProps, setFieldValue }: NumberInputEditPr
         } else {
             setValidations({ ...validations, max: undefined });
             setFieldValue(`fields[${index}].inputProps.max`, undefined);
+        }
+    }
+
+    const addPermissionForField = (type: string) => {
+        if (permissions.includes(type)) {
+            setFieldValue(`fields[${index}].permissions`, permissions.filter(p => p !== type));
+        } else {
+            setFieldValue(`fields[${index}].permissions`, [...permissions, type]);
         }
     }
 
@@ -99,7 +110,18 @@ const NumberInputEdit = ({ index, inputProps, setFieldValue }: NumberInputEditPr
                     </Dropdown.Item>
                 </Dropdown>
                 <Button color="dark" size="sm" pill={true} className="mx-1">+ Add Formatting</Button>
-                <Button color="dark" size="sm" pill={true} className="mx-1">+ Add Permissions</Button>
+                <Dropdown
+                    label="Select Permissions"
+                    pill={true}
+                    color="dark"
+                    size="sm"
+                >
+                    {users.map((user) => (
+                        <Dropdown.Item key={user.id} onClick={() => addPermissionForField(user.type)}>
+                            {permissions.includes(user.type) ? `✔ ` : ``}{user.type}
+                        </Dropdown.Item>
+                    ))}
+                </Dropdown>
             </div>
             <div className={"flex flex-col p-4 mt-4 border border-gray-500 rounded-2xl w-full" + (Object.values(validations).every((val) => val === undefined) ? " hidden" : "")}>
                 <p className="font-medium text-sm">Validations</p>

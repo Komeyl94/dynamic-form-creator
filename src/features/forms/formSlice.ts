@@ -28,12 +28,20 @@ export const formsSlice = createSlice({
       listCopy[formIndex] = action.payload;
       return { ...state, list: listCopy };
     },
+    deleteForm: (state, action: PayloadAction<string>) => {
+      const formIndex = state.list.findIndex(
+        (form) => form.id === action.payload
+      );
+      const listCopy = [...state.list];
+      listCopy.splice(formIndex, 1);
+      return { ...state, list: listCopy };
+    },
   },
 });
 
 export const selectFormById = (state: RootState, formId: string) =>
   state.forms.list.find((form) => form.id === formId);
 
-export const { addForm, updateForm } = formsSlice.actions;
+export const { addForm, updateForm, deleteForm } = formsSlice.actions;
 
 export default formsSlice.reducer;
