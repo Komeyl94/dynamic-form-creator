@@ -6,6 +6,10 @@ import TextEdit from './edit/TextEdit';
 import NumberEdit from './edit/NumberEdit';
 import HTMLEdit from './edit/HTMLEdit';
 import DateEdit from './edit/DateEdit';
+import DateRangeEdit from './edit/DateRangeEdit';
+import SelectEdit from './edit/SelectEdit';
+import RadioEdit from './edit/RadioEdit';
+import CheckboxEdit from './edit/CheckboxEdit';
 import { Button } from "flowbite-react";
 
 type SortableItemProps = {
@@ -36,10 +40,10 @@ export function SortableItem({ index, field, removeInput, setFieldValue }: Sorta
         "number": NumberEdit,
         "html": HTMLEdit,
         "date": DateEdit,
-        "daterange": TextEdit,
-        "select": TextEdit,
-        "radio": TextEdit,
-        "checkbox": TextEdit,
+        "daterange": DateRangeEdit,
+        "select": SelectEdit,
+        "radio": RadioEdit,
+        "checkbox": CheckboxEdit,
     };
 
     const Component = components[field.type || "text"];

@@ -110,7 +110,7 @@ const TextInputEdit = ({ index, permissions, inputProps, setFieldValue }: TextIn
                     </Dropdown.Item>
                 </Dropdown>
                 <Dropdown
-                    label="Select Permissions"
+                    label={`${permissions.length > 0 ? `(${permissions.length})` : 'Select'} Permissions`}
                     pill={true}
                     color="dark"
                     size="sm"

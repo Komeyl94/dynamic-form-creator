@@ -3,12 +3,12 @@ import { Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
 import { useAppSelector } from "../../../../app/hooks";
 import { camelCaseToNormal } from "../../../../utils/utilities";
-import { TextNumberInputProps } from "../../types";
+import { DateInputProps } from "../../types";
 
 type DateInputEditProps = {
     index: number;
     permissions: string[];
-    inputProps: TextNumberInputProps;
+    inputProps: DateInputProps;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }
 
@@ -111,7 +111,7 @@ const DateInputEdit = ({ index, permissions, inputProps, setFieldValue }: DateIn
                 </Dropdown>
                 <Button color="dark" size="sm" pill={true} className="mx-1">+ Add Formatting</Button>
                 <Dropdown
-                    label="Select Permissions"
+                    label={`${permissions.length > 0 ? `(${permissions.length})` : 'Select'} Permissions`}
                     pill={true}
                     color="dark"
                     size="sm"

@@ -53,7 +53,6 @@ const PermissionsCreate = () => {
         setTimeout(() => {
           if (values.type) {
             setSubmitting(false);
-            console.log(JSON.stringify(values, null, 2));
             if (isEdit) {
               dispatch(updatePermission(values));
             } else {

@@ -98,7 +98,7 @@ const HTMLInputEdit = ({ index, permissions, inputProps, setFieldValue }: HTMLIn
             </div>
             <div className="flex w-full">
                 <Dropdown
-                    label="Select Permissions"
+                    label={`${permissions.length > 0 ? `(${permissions.length})` : 'Select'} Permissions`}
                     pill={true}
                     color="dark"
                     size="sm"

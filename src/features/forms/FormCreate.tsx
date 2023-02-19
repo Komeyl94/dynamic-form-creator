@@ -12,7 +12,7 @@ import { v5 as uuidv5 } from "uuid";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import { emptyTextInputObj, emptyNumberInputObj, emptyHTMLInputObj, emptyDateInputObj } from "./utils";
+import { emptyTextInputObj, emptyNumberInputObj, emptyHTMLInputObj, emptyDateInputObj, emptySelectInputObj, emptyRadioInputObj, emptyCheckboxInputObj, emptyDateRangeInputObj } from "./utils";
 
 const UUID_NAMESPACE = "7aa1a8bc-1f25-494e-afbf-af9bf9a00db5";
 
@@ -55,6 +55,26 @@ const FormCreate = () => {
         arrayHelpers.push({ ...emptyDateInputObj, id: uuidv5(time, UUID_NAMESPACE) })
     }
 
+    const addDateRangeInput = (arrayHelpers: ArrayHelpers) => {
+        const time = String(new Date().valueOf());
+        arrayHelpers.push({ ...emptyDateRangeInputObj, id: uuidv5(time, UUID_NAMESPACE) })
+    }
+
+    const addSelectInput = (arrayHelpers: ArrayHelpers) => {
+        const time = String(new Date().valueOf());
+        arrayHelpers.push({ ...emptySelectInputObj, id: uuidv5(time, UUID_NAMESPACE) })
+    }
+
+    const addRadioInput = (arrayHelpers: ArrayHelpers) => {
+        const time = String(new Date().valueOf());
+        arrayHelpers.push({ ...emptyRadioInputObj, id: uuidv5(time, UUID_NAMESPACE) })
+    }
+
+    const addCheckboxInput = (arrayHelpers: ArrayHelpers) => {
+        const time = String(new Date().valueOf());
+        arrayHelpers.push({ ...emptyCheckboxInputObj, id: uuidv5(time, UUID_NAMESPACE) })
+    }
+
     const handleDragEnd = (event: DragEndEvent, arrayHelpers: ArrayHelpers) => {
         if (event.active.data.current && event.over) {
             arrayHelpers.swap(event.active.data.current.sortable.index, event.over.data.current?.sortable.index);
@@ -76,7 +96,7 @@ const FormCreate = () => {
             onSubmit={(values, { setSubmitting }) => {
                 setTimeout(() => {
                     setSubmitting(false);
-                    console.log(JSON.stringify(values, null, 2));
+                    // console.log(JSON.stringify(values, null, 2));
                     if (isEdit) {
                         dispatch(updateForm(values));
                     } else {
@@ -160,19 +180,16 @@ const FormCreate = () => {
                                                 <Dropdown.Item onClick={() => addDateInput(arrayHelpers)}>
                                                     Date Input
                                                 </Dropdown.Item>
-                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                <Dropdown.Item onClick={() => addDateRangeInput(arrayHelpers)}>
                                                     Date Range Input
                                                 </Dropdown.Item>
-                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                <Dropdown.Item onClick={() => addSelectInput(arrayHelpers)}>
                                                     Select Input
                                                 </Dropdown.Item>
-                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
-                                                    Select Input
-                                                </Dropdown.Item>
-                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                <Dropdown.Item onClick={() => addRadioInput(arrayHelpers)}>
                                                     Radio Input
                                                 </Dropdown.Item>
-                                                <Dropdown.Item onClick={() => addNumberInput(arrayHelpers)}>
+                                                <Dropdown.Item onClick={() => addCheckboxInput(arrayHelpers)}>
                                                     Checkbox Input
                                                 </Dropdown.Item>
                                             </Dropdown>

@@ -10,18 +10,19 @@ export type TextNumberInputProps = {
 }
 
 export type SelectInputOption = {
-    key: string;
+    label: string;
     value: string;
 }
 
 export type SelectInputProps = {
-    options: SelectInputOption[];
+    placeholder?: string;
+    options?: SelectInputOption[];
     required: boolean;
 }
 
 export type RadioInputOption = {
     label: string;
-    checked: boolean;
+    value: string;
 }
 
 export type RadioInputProps = {
@@ -31,7 +32,7 @@ export type RadioInputProps = {
 
 export type CheckboxInputOption = {
     label: string;
-    checked: boolean;
+    value: string;
 }
 
 export type CheckboxInputProps = {
@@ -42,15 +43,18 @@ export type CheckboxInputProps = {
 export type DateInputProps = {
     placeholder?: string;
     required: boolean;
+    min?: number;
+    max?: number;
 }
 export type DateRangeInputProps = {
-    startDate: Date;
-    endDate: Date;
-    placeholder?: string;
+    startDatePlaceholder?: string;
+    endDatePlaceholder?: string;
     required: boolean;
+    min?: number;
+    max?: number;
 }
 
-export type FormFieldInputProps = TextNumberInputProps | SelectInputProps | DateInputProps | DateRangeInputProps | RadioInputProps | CheckboxInputProps;
+export type FormFieldInputProps = TextNumberInputProps & SelectInputProps & DateInputProps & DateRangeInputProps & RadioInputProps & CheckboxInputProps;
 
 export type FormField = {
     id: string;

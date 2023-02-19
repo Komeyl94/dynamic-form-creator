@@ -3,12 +3,12 @@ import { Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
 import { useAppSelector } from "../../../../app/hooks";
 import { camelCaseToNormal } from "../../../../utils/utilities";
-import { TextNumberInputProps } from "../../types";
+import { DateRangeInputProps } from "../../types";
 
-type NumberInputEditProps = {
+type DateRangeInputEditProps = {
     index: number;
     permissions: string[];
-    inputProps: TextNumberInputProps;
+    inputProps: DateRangeInputProps;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }
 
@@ -17,7 +17,7 @@ type Validations = {
     max: number | undefined;
 }
 
-const NumberInputEdit = ({ index, permissions, inputProps, setFieldValue }: NumberInputEditProps) => {
+const DateRangeInputEdit = ({ index, permissions, inputProps, setFieldValue }: DateRangeInputEditProps) => {
     const defaultValidationValue = { min: inputProps.min || undefined, max: inputProps.max || undefined };
     const [validations, setValidations] = useState<Validations>(defaultValidationValue);
     const users = useAppSelector((state) => state.permissions.users);
@@ -52,7 +52,7 @@ const NumberInputEdit = ({ index, permissions, inputProps, setFieldValue }: Numb
 
     return (
         <div className="flex flex-wrap items-stretch my-3 p-5 pt-3 rounded-xl bg-slate-300">
-            <p className="mb-3 text-sm font-medium">Number Input</p>
+            <p className="mb-3 text-sm font-medium">Date Range Input</p>
             <div className="mb-1 flex w-full">
                 <Field name={`fields[${index}].label`}>
                     {({
@@ -64,14 +64,24 @@ const NumberInputEdit = ({ index, permissions, inputProps, setFieldValue }: Numb
                 <ErrorMessage name={`fields[${index}].label`} component="div" />
             </div>
             <div className="mb-1 flex w-full">
-                <Field name={`fields[${index}].inputProps.placeholder`}>
+                <Field name={`fields[${index}].inputProps.startDatePlaceholder`}>
                     {({
                         field,
                     }: FieldProps) => (
-                        <TextInput type="text" className="w-full" placeholder="Enter input placeholder" {...field} />
+                        <TextInput type="text" className="w-full" placeholder="Enter start date input placeholder" {...field} />
                     )}
                 </Field>
-                <ErrorMessage name={`fields[${index}].inputProps.placeholder`} component="div" />
+                <ErrorMessage name={`fields[${index}].inputProps.startDatePlaceholder`} component="div" />
+            </div>
+            <div className="mb-1 flex w-full">
+                <Field name={`fields[${index}].inputProps.endDatePlaceholder`}>
+                    {({
+                        field,
+                    }: FieldProps) => (
+                        <TextInput type="text" className="w-full" placeholder="Enter end date input placeholder" {...field} />
+                    )}
+                </Field>
+                <ErrorMessage name={`fields[${index}].inputProps.endDatePlaceholder`} component="div" />
             </div>
             <div className="mb-4 flex w-full">
                 <Field name={`fields[${index}].description`}>
@@ -103,10 +113,10 @@ const NumberInputEdit = ({ index, permissions, inputProps, setFieldValue }: Numb
                     size="sm"
                 >
                     <Dropdown.Item onClick={addMin}>
-                        {validations.min !== undefined ? `✔ ` : ``}Minimum number
+                        {validations.min !== undefined ? `✔ ` : ``}Minimum date
                     </Dropdown.Item>
                     <Dropdown.Item onClick={addMax}>
-                        {validations.max !== undefined ? `✔ ` : ``}Maximum number
+                        {validations.max !== undefined ? `✔ ` : ``}Maximum date
                     </Dropdown.Item>
                 </Dropdown>
                 <Button color="dark" size="sm" pill={true} className="mx-1">+ Add Formatting</Button>
@@ -136,7 +146,7 @@ const NumberInputEdit = ({ index, permissions, inputProps, setFieldValue }: Numb
                                             field,
                                         }: FieldProps) => (
                                             <TextInput
-                                                type="number"
+                                                type="date"
                                                 className="w-full"
                                                 {...field}
                                             />
@@ -154,4 +164,4 @@ const NumberInputEdit = ({ index, permissions, inputProps, setFieldValue }: Numb
     )
 }
 
-export default NumberInputEdit;
+export default DateRangeInputEdit;
