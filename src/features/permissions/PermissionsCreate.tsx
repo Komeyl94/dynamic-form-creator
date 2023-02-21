@@ -67,7 +67,7 @@ const PermissionsCreate = () => {
         <div className="flex flex-row justify-between">
           <div className="flex flex-col flex-1 items-center py-5">
             <h1 className="text-xl font-bold mb-10">{isEdit ? "Update Permission" : "New Permission"}</h1>
-            <Form className="flex flex-col gap-4 w-full pr-7">
+            <Form className="flex flex-col gap-4 w-full">
               <div>
                 <div className="mb-2 block">
                   <Label

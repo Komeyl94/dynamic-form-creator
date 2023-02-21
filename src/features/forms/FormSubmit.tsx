@@ -59,7 +59,7 @@ const FormShow = ({ initialValues, form, isFormEdit }: FormShowProps) => {
       }}
     >
       {({ values, isSubmitting, setFieldValue }) => (
-        <Form className="flex flex-col gap-4 w-full pr-7">
+        <Form className="flex flex-col gap-4 w-full">
           <div className="flex flex-col justify-between">
             <h1>{form.name}</h1>
             <h2>{form.description}</h2>

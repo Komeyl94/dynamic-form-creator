@@ -22,7 +22,7 @@ const HTMLInputEdit = ({ index, permissions, inputProps, setFieldValue }: HTMLIn
     }
 
     return (
-        <div className="flex flex-wrap items-stretch my-3 p-5 pt-3 rounded-xl bg-slate-300">
+        <div className="flex flex-wrap items-stretch my-3 p-5 pt-3 rounded-xl bg-slate-300 w-full">
             <p className="mb-3 text-sm font-medium">HTML Input</p>
             <div className="mb-1 flex w-full">
                 <Field name={`fields[${index}].label`}>
