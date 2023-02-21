@@ -59,26 +59,32 @@ const FormShow = ({ initialValues, form, isFormEdit }: FormShowProps) => {
       }}
     >
       {({ values, isSubmitting, setFieldValue }) => (
-        <Form className="flex flex-col gap-4 w-full">
-          <div className="flex flex-col justify-between">
-            <h1>{form.name}</h1>
-            <h2>{form.description}</h2>
-            {
-              form.fields.map((field, index) => {
-                const components = {
-                  "text": Text,
-                  "number": Number,
-                  "html": HTML,
-                  "date": DateDisplay,
-                  "daterange": DateRange,
-                  "select": Select,
-                  "radio": Radio,
-                  "checkbox": Checkbox,
-                };
-                const Component = components[field.type || "text"];
-                return (<Component key={field.label + index} field={field} />);
-              })
-            }
+        <Form className="flex flex-col items-center gap-4 w-full">
+          <div className="flex flex-col items-stretch max-w-2xl lg:w-[42em]">
+            <h1 className="text-2xl text-center font-bold mb-2">{form.name}</h1>
+            <h2 className="text-lg text-center font-medium mb-10">{form.description}</h2>
+            <div className="border p-5 rounded-2xl">
+              {
+                form.fields.map((field, index) => {
+                  const components = {
+                    "text": Text,
+                    "number": Number,
+                    "html": HTML,
+                    "date": DateDisplay,
+                    "daterange": DateRange,
+                    "select": Select,
+                    "radio": Radio,
+                    "checkbox": Checkbox,
+                  };
+                  const Component = components[field.type || "text"];
+                  return (
+                    <div key={field.label + index} className="my-3">
+                      <Component field={field} />
+                    </div>
+                  );
+                })
+              }
+            </div>
             <Button type="submit" disabled={isSubmitting} className="mt-6" gradientDuoTone="greenToBlue" size="lg">
               {isSubmitting ? (
                 <><div className="mr-3">

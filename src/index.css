@@ -388,3 +388,17 @@ i {
   justify-content: center;
   width: 100%;
 }
+
+.quill .ql-snow {
+    border: 0 !important;
+    background: #f9fafb;
+    box-shadow: 0 0px 1px hsl(0deg 0% 0% / 20%), 0 1px 2px hsl(0deg 0% 0% / 20%);
+}
+
+.quill .ql-snow:first-of-type {
+    border-radius: 8px 8px 0 0;
+}
+
+.quill .ql-snow:last-of-type {
+    border-radius: 0 0 8px 8px;
+}

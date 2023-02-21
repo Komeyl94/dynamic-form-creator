@@ -1,5 +1,5 @@
 export type Service = {
     id: string;
-    type: string;
+    name: string;
     url: string;
 }

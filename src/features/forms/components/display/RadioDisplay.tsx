@@ -14,10 +14,10 @@ const RadioInputDisplay = ({ field: formField }: Props) => {
             <fieldset
                 className="flex flex-col gap-4"
             >
-                <legend>
-                    {formField.label}
-                </legend>
-                <div className="flex items-center">
+                <div className="block -mb-2">
+                    <Label value={formField.label} />
+                </div>
+                <div role="group" className="flex items-center mb-0.5">
                     {
                         formField.inputProps.options?.map((option) => {
                             return (
@@ -26,11 +26,9 @@ const RadioInputDisplay = ({ field: formField }: Props) => {
                                         {({
                                             field,
                                         }: FieldProps) => (
-                                            <div className="flex items-center gap-2 mr-4">
-                                                <Label>
-                                                    <Radio {...field} />
-                                                    {option.label}
-                                                </Label>
+                                            <div className="flex items-center gap-2 mr-4 bg-gray-100 px-2.5 py-1.5 border rounded-3xl">
+                                                <Radio id={fieldName+option.value} {...field} />
+                                                <Label htmlFor={fieldName+option.value}>{option.label}</Label>
                                             </div>
                                         )}
                                     </Field>
@@ -40,7 +38,7 @@ const RadioInputDisplay = ({ field: formField }: Props) => {
                     }
                 </div>
             </fieldset>
-            <p>{formField.description}</p>
+            <small>{formField.description}</small>
         </div>
     )
 }

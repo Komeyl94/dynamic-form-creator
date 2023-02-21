@@ -19,7 +19,7 @@ const NumberInputDisplay = ({ field: formField }: Props) => {
                         <Label value={formField.label} />
                     </div>
                     <TextInput type="number" {...formField.inputProps} {...field} />
-                    <p>{formField.description}</p>
+                    <small>{formField.description}</small>
                 </div>
             )}
         </Field>

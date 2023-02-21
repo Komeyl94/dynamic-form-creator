@@ -1,3 +1,5 @@
+import { Service } from "../services/types";
+
 export type FormFieldTypes = "number" | "text" | "html" | "date" | "daterange" | "select" | "radio" | "checkbox";
 
 export type TextNumberInputProps = {
@@ -72,6 +74,7 @@ export type FormType = {
     name: string;
     description: string;
     fields: FormField[];
+    services?: Service[];
     beforeInit?: () => {};
     afterInit?: () => {};
     beforeSubmit?: () => {};

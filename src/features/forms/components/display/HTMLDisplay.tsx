@@ -54,7 +54,7 @@ const HTMLInputDisplay = ({ field: formField }: Props) => {
                         placeholder={formField.inputProps.placeholder}
                         onChange={(value: string) => onHTMLFieldChange(form, value)}
                     />
-                    <p>{formField.description}</p>
+                    <small>{formField.description}</small>
                 </div>
             )}
         </Field>

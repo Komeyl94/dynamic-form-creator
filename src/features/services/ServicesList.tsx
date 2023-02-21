@@ -10,6 +10,8 @@ const ServicesList = () => {
         dispatch(deleteService(id));
     }
 
+    console.log('list', list)
+
     if (list) {
         return (
             <div>
@@ -40,7 +42,7 @@ const ServicesList = () => {
                                             {index + 1}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {service.type}
+                                            {service.name}
                                         </Table.Cell>
                                         <Table.Cell>
                                             {service.url}

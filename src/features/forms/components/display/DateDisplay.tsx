@@ -19,7 +19,7 @@ const DateInputDisplay = ({ field: formField }: Props) => {
                         <Label value={formField.label} />
                     </div>
                     <TextInput type="date" {...formField.inputProps} {...field} />
-                    <p>{formField.description}</p>
+                    <small>{formField.description}</small>
                 </div>
             )}
         </Field>

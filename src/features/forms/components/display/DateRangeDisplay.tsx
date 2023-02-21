@@ -20,7 +20,7 @@ const DateInputDisplay = ({ field: formField }: Props) => {
                         field,
                     }: FieldProps) => (
                         <TextInput
-                            className="flex-1 mx-1"
+                            className="flex-1 mr-1"
                             type="date"
                             placeholder={formField.inputProps.startDatePlaceholder}
                             required={formField.inputProps.required} {...field}
@@ -32,7 +32,7 @@ const DateInputDisplay = ({ field: formField }: Props) => {
                         field,
                     }: FieldProps) => (
                         <TextInput
-                            className="flex-1 mx-1"
+                            className="flex-1 ml-1"
                             type="date"
                             placeholder={formField.inputProps.endDatePlaceholder}
                             required={formField.inputProps.required} {...field}
@@ -40,7 +40,7 @@ const DateInputDisplay = ({ field: formField }: Props) => {
                     )}
                 </Field>
             </div>
-            <p>{formField.description}</p>
+            <small>{formField.description}</small>
         </div>
     )
 }

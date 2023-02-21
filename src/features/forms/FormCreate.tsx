@@ -5,14 +5,15 @@ import { SortableContext } from '@dnd-kit/sortable';
 import { SortableItem } from "./components/SortableItem";
 import { FormType } from "./types";
 import { Formik, Form, Field, ErrorMessage, FieldProps, FieldArray, ArrayHelpers } from 'formik';
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { addForm, selectFormById, updateForm } from "./formSlice";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { v5 as uuidv5 } from "uuid";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { emptyTextInputObj, emptyNumberInputObj, emptyHTMLInputObj, emptyDateInputObj, emptySelectInputObj, emptyRadioInputObj, emptyCheckboxInputObj, emptyDateRangeInputObj } from "./utils";
+import { Service } from "../services/types";
 
 const UUID_NAMESPACE = "7aa1a8bc-1f25-494e-afbf-af9bf9a00db5";
 
@@ -21,19 +22,30 @@ const FormCreate = () => {
     const navigate = useNavigate();
     const { formId } = useParams();
     const location = useLocation();
+    const services = useAppSelector((state) => state.services.list);
+    const [selectedServices, setSelectedServices] = useState<Service[]>([])
+
     const isEdit = location.pathname.startsWith("/forms/edit") && formId;
     const formInState = useSelector<RootState, FormType | undefined>((state) => selectFormById(state, formId || ""));
 
     const timestamp = String(new Date().valueOf());
     const formUUID = uuidv5(timestamp, UUID_NAMESPACE);
 
-    const initialValues: FormType = formInState || { id: formUUID, name: "", description: "", fields: [] };
+    const initialValues: FormType = formInState || { id: formUUID, name: "", description: "", fields: [], services: [] };
+
+    console.log('formInState', formInState)
 
     useEffect(() => {
         if (!isEdit) {
             navigate("/forms/add", { replace: true })
         }
     }, [isEdit, navigate])
+
+    useEffect(() => {
+        if (formInState) {
+            setSelectedServices(formInState.services || []);
+        }
+    }, [formInState])
 
     const addTextInput = (arrayHelpers: ArrayHelpers) => {
         const time = String(new Date().valueOf());
@@ -83,6 +95,18 @@ const FormCreate = () => {
 
     const removeInput = (index: number, arrayHelpers: ArrayHelpers) => {
         arrayHelpers.remove(index);
+    };
+
+    const addServiceToForm = (service: Service, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
+        let selectedServicesCopy = [...selectedServices];
+        const index = selectedServicesCopy.findIndex((s) => s.id === service.id);
+        if (index >= 0) {
+            selectedServicesCopy.splice(index, 1);
+        } else {
+            selectedServicesCopy.push(service);
+        }
+        setSelectedServices(selectedServicesCopy);
+        setFieldValue("services", selectedServicesCopy);
     };
 
     return (
@@ -162,7 +186,7 @@ const FormCreate = () => {
                                             </DndContext>
                                             {values.fields.length === 0 ? <div className="text-center opacity-50 w-full">No Inputs Yet!</div> : ""}
                                         </div>
-                                        <div className="flex flex-col items-stretch">
+                                        <div className="flex flex-row items-stretch">
                                             <Dropdown
                                                 label="Add New Field"
                                                 gradientDuoTone="redToYellow"
@@ -191,6 +215,21 @@ const FormCreate = () => {
                                                 <Dropdown.Item onClick={() => addCheckboxInput(arrayHelpers)}>
                                                     Checkbox Input
                                                 </Dropdown.Item>
+                                            </Dropdown>
+                                            <div className="mx-1"></div>
+                                            <Dropdown
+                                                label={`Connect Services (${selectedServices.length})`}
+                                                gradientDuoTone="redToYellow"
+                                            >
+                                                {
+                                                    services.map((service) => {
+                                                        return (
+                                                            <Dropdown.Item key={service.id} onClick={() => addServiceToForm(service, setFieldValue)}>
+                                                                {selectedServices.findIndex((s) => s.id === service.id) >= 0 ? `✔ ` : ``}{service.name}
+                                                            </Dropdown.Item>
+                                                        )
+                                                    })
+                                                }
                                             </Dropdown>
                                         </div>
                                     </div>

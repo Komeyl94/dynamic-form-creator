@@ -58,25 +58,25 @@ const FormsList = () => {
                     <Table.Cell>
                       <a
                         href={`/forms/edit/${form.id}`}
-                        className="font-medium text-blue-600 mx-2 hover:underline dark:text-blue-500"
+                        className="font-medium text-blue-600 mx-3 hover:underline dark:text-blue-500"
                       >
                         Edit
                       </a>
                       <span
                         onClick={() => submitForm(form.id)}
-                        className="font-medium cursor-pointer mx-2 text-blue-600 hover:underline dark:text-blue-500"
+                        className="font-medium cursor-pointer mx-3 text-blue-600 hover:underline dark:text-blue-500"
                       >
-                        Submit
+                        Submit New
                       </span>
                       <span
                         onClick={() => viewForm(form.id)}
-                        className="font-medium cursor-pointer mx-2 text-blue-600 hover:underline dark:text-blue-500"
+                        className="font-medium cursor-pointer mx-3 text-blue-600 hover:underline dark:text-blue-500"
                       >
-                        View
+                        Submitted Forms
                       </span>
                       <span
                         onClick={() => removeForm(form.id)}
-                        className="font-medium cursor-pointer mx-2 text-blue-600 hover:underline dark:text-blue-500"
+                        className="font-medium cursor-pointer mx-3 text-blue-600 hover:underline dark:text-blue-500"
                       >
                         Delete
                       </span>

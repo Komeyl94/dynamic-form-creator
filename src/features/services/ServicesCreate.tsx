@@ -10,7 +10,8 @@ import { Service } from "./types";
 import { Button, Label, Spinner, TextInput } from "flowbite-react";
 
 type ServiceErrors = {
-  type?: string;
+  name?: string;
+  url?: string;
 }
 
 const UUID_NAMESPACE = "7aa1a8bc-1f25-494e-afbf-af9bf9a00db5";
@@ -27,7 +28,7 @@ const ServicesCreate = () => {
   const timestamp = String(new Date().valueOf());
   const userUUID = uuidv5(timestamp, UUID_NAMESPACE);
 
-  const initialValues: Service = serviceInState || { id: userUUID, type: "", url: "" };
+  const initialValues: Service = serviceInState || { id: userUUID, name: "", url: "" };
 
   useEffect(() => {
     if (!isEdit) {
@@ -41,17 +42,19 @@ const ServicesCreate = () => {
       enableReinitialize
       validate={values => {
         const errors: ServiceErrors = {};
-        const userTypes = services.map(user => user.type);
-        if (!values.type) {
-          errors.type = "Enter a service name"
-        } else if (userTypes.indexOf(values.type) >= 0) {
-          errors.type = "Service already exists"
+        const serviceNames = services.map(user => user.name);
+        if (!values.name) {
+          errors.name = "Enter a service name"
+        } else if (serviceNames.indexOf(values.name) >= 0) {
+          errors.name = "Service already exists"
+        } else if (!values.url) {
+          errors.url = "Enter a service url"
         }
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
-          if (values.type) {
+          if (values.name && values.url) {
             setSubmitting(false);
             if (isEdit) {
               dispatch(updateService(values));
@@ -71,15 +74,15 @@ const ServicesCreate = () => {
               <div>
                 <div className="mb-2 block">
                   <Label
-                    htmlFor="type"
-                    value="Service type"
+                    htmlFor="name"
+                    value="Service name"
                   />
                 </div>
-                <Field name="type">
+                <Field name="name">
                   {({
                     field,
                   }: FieldProps) => (
-                    <TextInput type="text" id="type" placeholder="Enter service type" {...field} />
+                    <TextInput type="text" id="name" placeholder="Enter service name" {...field} />
                   )}
                 </Field>
                 <ErrorMessage name="type" component="div" />

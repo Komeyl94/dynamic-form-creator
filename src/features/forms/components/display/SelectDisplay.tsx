@@ -26,7 +26,7 @@ const SelectInputDisplay = ({ field: formField }: Props) => {
                             })
                         }
                     </Select>
-                    <p>{formField.description}</p>
+                    <small>{formField.description}</small>
                 </div>
             )}
         </Field>
