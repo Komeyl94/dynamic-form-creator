@@ -15,6 +15,8 @@ import Root from "./features/root";
 import PermissionsList from "./features/permissions/PermissionsList";
 import PermissionsAdd from "./features/permissions/PermissionsCreate";
 import FormsSubmittedList from "./features/forms/FormsSubmittedList";
+import ServicesList from "./features/services/ServicesList";
+import ServicesCreate from "./features/services/ServicesCreate";
 
 const router = createBrowserRouter([
   {
@@ -50,14 +52,6 @@ const router = createBrowserRouter([
         element: <FormsSubmittedList />
       },
       {
-        path: "/services",
-        element: <div>Services</div>
-      },
-      {
-        path: "/services/add",
-        element: <div>Add Service</div>
-      },
-      {
         path: "/permissions",
         element: <PermissionsList />
       },
@@ -68,6 +62,18 @@ const router = createBrowserRouter([
       {
         path: "/permissions/edit/:userId",
         element: <PermissionsAdd />
+      },
+      {
+        path: "/services",
+        element: <ServicesList />
+      },
+      {
+        path: "/services/create",
+        element: <ServicesCreate />
+      },
+      {
+        path: "/services/edit/:serviceId",
+        element: <ServicesCreate />
       },
     ],
   },
