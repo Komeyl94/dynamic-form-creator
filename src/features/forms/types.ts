@@ -15,7 +15,6 @@ export type SelectInputOption = {
 }
 
 export type SelectInputProps = {
-    placeholder?: string;
     options?: SelectInputOption[];
     required: boolean;
 }

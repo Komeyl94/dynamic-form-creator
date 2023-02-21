@@ -1,38 +1,41 @@
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { Button, Table } from "flowbite-react";
-import { deleteForm } from "./formSlice";
-import { useNavigate } from "react-router-dom";
+import { deleteSubmittedForm, FormSubmitData, selectFormById, selectFormsSubmittedById } from "./formSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import { RootState } from "../../app/store";
+import { useSelector } from "react-redux";
+import { FormType } from "./types";
 
-const FormsList = () => {
+const FormsSubmittedList = () => {
+  const { formId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const forms = useAppSelector((state) => state.forms.list);
+  const formInState = useSelector<RootState, FormType | undefined>((state) => selectFormById(state, formId || ""));
+  const formsSubmitted = useSelector<RootState, FormSubmitData[] | undefined>((state) => selectFormsSubmittedById(state, formId || ""));
 
   const removeForm = (id: string) => {
-    dispatch(deleteForm(id));
+    dispatch(deleteSubmittedForm(id));
   }
 
-  const submitForm = (id: string) => {
-    navigate(`/forms/submit/${id}`);
-  }
-  
-  const viewForm = (id: string) => {
-    navigate(`/forms/${id}/list`);
+  const editForm = (id: string, formId: string) => {
+    navigate(`/forms/submit/edit/${id}/${formId}`);
   }
 
-  if (forms) {
+  if (formsSubmitted) {
     return (<div>
-      <Button outline={true} gradientDuoTone="cyanToBlue" className="mb-4" href="/forms/add">Add Form</Button>
       <Table hoverable={true}>
         <Table.Head>
           <Table.HeadCell>
             Index
           </Table.HeadCell>
           <Table.HeadCell>
-            Name
+            Form Name
           </Table.HeadCell>
           <Table.HeadCell>
-            Description
+            Created Date
+          </Table.HeadCell>
+          <Table.HeadCell>
+            Updated Date
           </Table.HeadCell>
           <Table.HeadCell>
             <span className="sr-only">
@@ -42,39 +45,30 @@ const FormsList = () => {
         </Table.Head>
         <Table.Body className="divide-y">
           {
-            forms.length > 0 ? forms.map((form, index) => {
+            formsSubmitted.length > 0 ? formsSubmitted.map((form, index) => {
               return (
-                <Table.Row key={form.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                <Table.Row key={String(form.id)} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                     {index + 1}
                   </Table.Cell>
                   <Table.Cell>
-                    {form.name}
+                    {formInState?.name}
                   </Table.Cell>
                   <Table.Cell>
-                    {form.description}
+                    {new Date(parseInt(form.created_date)).toDateString()}
                   </Table.Cell>
                   <Table.Cell>
-                    <a
-                      href={`/forms/edit/${form.id}`}
+                    {new Date(parseInt(form.updated_date)).toDateString()}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <span
+                      onClick={() => editForm(String(form.id), String(form.formId))}
                       className="font-medium text-blue-600 mx-2 hover:underline dark:text-blue-500"
                     >
                       Edit
-                    </a>
-                    <span
-                      onClick={() => submitForm(form.id)}
-                      className="font-medium cursor-pointer mx-2 text-blue-600 hover:underline dark:text-blue-500"
-                    >
-                      Submit
                     </span>
                     <span
-                      onClick={() => viewForm(form.id)}
-                      className="font-medium cursor-pointer mx-2 text-blue-600 hover:underline dark:text-blue-500"
-                    >
-                      View
-                    </span>
-                    <span
-                      onClick={() => removeForm(form.id)}
+                      onClick={() => removeForm(String(form.id))}
                       className="font-medium cursor-pointer mx-2 text-blue-600 hover:underline dark:text-blue-500"
                     >
                       Delete
@@ -94,4 +88,4 @@ const FormsList = () => {
   </div>);
 }
 
-export default FormsList;
+export default FormsSubmittedList;

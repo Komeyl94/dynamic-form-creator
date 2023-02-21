@@ -96,7 +96,6 @@ const FormCreate = () => {
             onSubmit={(values, { setSubmitting }) => {
                 setTimeout(() => {
                     setSubmitting(false);
-                    // console.log(JSON.stringify(values, null, 2));
                     if (isEdit) {
                         dispatch(updateForm(values));
                     } else {

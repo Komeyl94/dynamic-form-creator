@@ -9,13 +9,12 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import FormCreate from "./features/forms/FormCreate";
-import FormDisplay, {
-  loader as formDisplayLoader,
-} from "./features/forms/FormDisplay";
+import FormSubmit from "./features/forms/FormSubmit";
 import FormsList from "./features/forms/FormsList";
 import Root from "./features/root";
 import PermissionsList from "./features/permissions/PermissionsList";
 import PermissionsAdd from "./features/permissions/PermissionsCreate";
+import FormsSubmittedList from "./features/forms/FormsSubmittedList";
 
 const router = createBrowserRouter([
   {
@@ -39,9 +38,16 @@ const router = createBrowserRouter([
         element: <FormCreate />,
       },
       {
-        path: "/forms/display/:formId",
-        element: <FormDisplay />,
-        loader: formDisplayLoader
+        path: "/forms/submit/:formId",
+        element: <FormSubmit />,
+      },
+      {
+        path: "/forms/submit/edit/:id/:formId",
+        element: <FormSubmit />,
+      },
+      {
+        path: "/forms/:formId/list",
+        element: <FormsSubmittedList />
       },
       {
         path: "/services",

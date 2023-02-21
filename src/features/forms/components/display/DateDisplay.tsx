@@ -7,7 +7,7 @@ type Props = {
     field: FormField;
 }
 
-const NumberInputDisplay = ({ field: formField }: Props) => {
+const DateInputDisplay = ({ field: formField }: Props) => {
     const fieldName = fieldNameGenerator(formField.label, formField.id);
     return (
         <Field name={fieldName}>
@@ -18,7 +18,7 @@ const NumberInputDisplay = ({ field: formField }: Props) => {
                     <div className="mb-2 block">
                         <Label value={formField.label} />
                     </div>
-                    <TextInput type="number" {...formField.inputProps} {...field} />
+                    <TextInput type="date" {...formField.inputProps} {...field} />
                     <p>{formField.description}</p>
                 </div>
             )}
@@ -26,4 +26,4 @@ const NumberInputDisplay = ({ field: formField }: Props) => {
     )
 }
 
-export default NumberInputDisplay;
+export default DateInputDisplay;

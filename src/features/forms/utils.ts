@@ -98,3 +98,15 @@ export const emptyCheckboxInputObj = {
   type: "checkbox",
   name: "",
 };
+
+export const fieldNameGenerator = (
+  label: string,
+  id: string,
+  suffix?: string
+) => {
+  if (suffix) {
+    return `${label.replaceAll(" ", "_").toLowerCase()}##${id}_${suffix}`;
+  } else {
+    return `${label.replaceAll(" ", "_").toLowerCase()}##${id}`;
+  }
+};

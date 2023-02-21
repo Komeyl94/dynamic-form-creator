@@ -13,13 +13,6 @@ type HTMLInputEditProps = {
 const HTMLInputEdit = ({ index, permissions, inputProps, setFieldValue }: HTMLInputEditProps) => {
     const users = useAppSelector((state) => state.permissions.users);
 
-    const formats = [
-        'header',
-        'bold', 'italic', 'underline', 'strike', 'blockquote',
-        'list', 'bullet', 'indent',
-        'link'
-    ];
-
     const addPermissionForField = (type: string) => {
         if (permissions.includes(type)) {
             setFieldValue(`fields[${index}].permissions`, permissions.filter(p => p !== type));
@@ -72,29 +65,6 @@ const HTMLInputEdit = ({ index, permissions, inputProps, setFieldValue }: HTMLIn
                 <Label htmlFor={`fields[${index}].inputProps.required`} className="pl-3 leading-4">
                     Required
                 </Label>
-            </div>
-            <div className="mb-4 flex flex-col p-4 border border-gray-500 rounded-2xl w-full">
-                <p className="mb-3 text-sm font-medium">Choose options for input:</p>
-                <div className="flex flex-wrap">
-                    {
-                        formats.map((format, i) => {
-                            return (
-                                <div key={format + i}>
-                                    <Field type="checkbox" name={`input-${format}`}>
-                                        {({
-                                            field,
-                                        }: FieldProps) => (
-                                            <Checkbox id={`input-${format}`} {...field} />
-                                        )}
-                                    </Field>
-                                    <Label htmlFor={`input-${format}`} className="pr-3 pl-2 leading-4">
-                                        {format.toUpperCase()}
-                                    </Label>
-                                </div>
-                            )
-                        })
-                    }
-                </div>
             </div>
             <div className="flex w-full">
                 <Dropdown
