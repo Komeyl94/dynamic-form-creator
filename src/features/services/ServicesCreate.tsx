@@ -7,7 +7,7 @@ import { RootState } from "../../app/store";
 import { addService, updateService, selectServiceById } from "./servicesSlice";
 import { v5 as uuidv5 } from "uuid";
 import { Service } from "./types";
-import { Button, Label, Spinner, TextInput } from "flowbite-react";
+import { Button, Label, Select, Spinner, TextInput } from "flowbite-react";
 
 type ServiceErrors = {
   name?: string;
@@ -28,7 +28,7 @@ const ServicesCreate = () => {
   const timestamp = String(new Date().valueOf());
   const userUUID = uuidv5(timestamp, UUID_NAMESPACE);
 
-  const initialValues: Service = serviceInState || { id: userUUID, name: "", url: "" };
+  const initialValues: Service = serviceInState || { id: userUUID, name: "", url: "", time: "afterInit" };
 
   useEffect(() => {
     if (!isEdit) {
@@ -101,7 +101,28 @@ const ServicesCreate = () => {
                     <TextInput type="url" id="url" placeholder="Enter service url" {...field} />
                   )}
                 </Field>
-                <ErrorMessage name="type" component="div" />
+                <ErrorMessage name="url" component="div" />
+              </div>
+              <div>
+                <div className="mb-2 block">
+                  <Label
+                    htmlFor="time"
+                    value="Service time"
+                  />
+                </div>
+                <Field name="time">
+                  {({
+                    field,
+                  }: FieldProps) => (
+                    <Select id="time" placeholder="Enter service time" {...field}>
+                      <option value="beforeInit">Before Form Initiation</option>
+                      <option value="afterInit">After Form Initiation</option>
+                      <option value="beforeSubmit">Before Form Submit</option>
+                      <option value="afterSubmit">After Form Submit</option>
+                    </Select>
+                  )}
+                </Field>
+                <ErrorMessage name="time" component="div" />
               </div>
               <Button type="submit" disabled={isSubmitting} className="mt-6" gradientDuoTone="greenToBlue" size="lg">
                 {isSubmitting ? (

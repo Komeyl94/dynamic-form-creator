@@ -1,5 +1,6 @@
 import { Button, Table } from "flowbite-react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { camelCaseToNormal } from "../../utils/utilities";
 import { deleteService } from "./servicesSlice";
 
 const ServicesList = () => {
@@ -9,8 +10,6 @@ const ServicesList = () => {
     const removeService = (id: string) => {
         dispatch(deleteService(id));
     }
-
-    console.log('list', list)
 
     if (list) {
         return (
@@ -26,6 +25,9 @@ const ServicesList = () => {
                         </Table.HeadCell>
                         <Table.HeadCell>
                             URL
+                        </Table.HeadCell>
+                        <Table.HeadCell>
+                            Time
                         </Table.HeadCell>
                         <Table.HeadCell>
                             <span className="sr-only">
@@ -46,6 +48,9 @@ const ServicesList = () => {
                                         </Table.Cell>
                                         <Table.Cell>
                                             {service.url}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {camelCaseToNormal(service.time)}
                                         </Table.Cell>
                                         <Table.Cell>
                                             <a

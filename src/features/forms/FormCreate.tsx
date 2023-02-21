@@ -4,12 +4,12 @@ import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
 import { SortableItem } from "./components/SortableItem";
 import { FormType } from "./types";
-import { Formik, Form, Field, ErrorMessage, FieldProps, FieldArray, ArrayHelpers } from 'formik';
+import { Formik, Form, Field, ErrorMessage, FieldProps, FieldArray, ArrayHelpers, FormikProps } from 'formik';
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { addForm, selectFormById, updateForm } from "./formSlice";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { v5 as uuidv5 } from "uuid";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { emptyTextInputObj, emptyNumberInputObj, emptyHTMLInputObj, emptyDateInputObj, emptySelectInputObj, emptyRadioInputObj, emptyCheckboxInputObj, emptyDateRangeInputObj } from "./utils";
@@ -24,6 +24,7 @@ const FormCreate = () => {
     const location = useLocation();
     const services = useAppSelector((state) => state.services.list);
     const [selectedServices, setSelectedServices] = useState<Service[]>([])
+    const formRef = useRef<FormikProps<FormType>>(null);
 
     const isEdit = location.pathname.startsWith("/forms/edit") && formId;
     const formInState = useSelector<RootState, FormType | undefined>((state) => selectFormById(state, formId || ""));
@@ -32,8 +33,6 @@ const FormCreate = () => {
     const formUUID = uuidv5(timestamp, UUID_NAMESPACE);
 
     const initialValues: FormType = formInState || { id: formUUID, name: "", description: "", fields: [], services: [] };
-
-    console.log('formInState', formInState)
 
     useEffect(() => {
         if (!isEdit) {
@@ -97,7 +96,7 @@ const FormCreate = () => {
         arrayHelpers.remove(index);
     };
 
-    const addServiceToForm = (service: Service, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void) => {
+    const addServiceToForm = (service: Service) => {
         let selectedServicesCopy = [...selectedServices];
         const index = selectedServicesCopy.findIndex((s) => s.id === service.id);
         if (index >= 0) {
@@ -106,11 +105,12 @@ const FormCreate = () => {
             selectedServicesCopy.push(service);
         }
         setSelectedServices(selectedServicesCopy);
-        setFieldValue("services", selectedServicesCopy);
+        formRef.current?.setFieldValue("services", selectedServicesCopy);
     };
 
     return (
         <Formik
+            innerRef={formRef}
             initialValues={initialValues}
             enableReinitialize
             validate={values => {
@@ -224,7 +224,7 @@ const FormCreate = () => {
                                                 {
                                                     services.map((service) => {
                                                         return (
-                                                            <Dropdown.Item key={service.id} onClick={() => addServiceToForm(service, setFieldValue)}>
+                                                            <Dropdown.Item key={service.id} onClick={() => addServiceToForm(service)}>
                                                                 {selectedServices.findIndex((s) => s.id === service.id) >= 0 ? `✔ ` : ``}{service.name}
                                                             </Dropdown.Item>
                                                         )
