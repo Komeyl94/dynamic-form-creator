@@ -1,5 +1,6 @@
 import { Button, Checkbox, Dropdown, Label, TextInput } from "flowbite-react";
 import { Field, FieldProps, ErrorMessage, FieldArray, ArrayHelpers } from "formik";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../../app/hooks";
 import { RadioInputProps } from "../../types";
 
@@ -12,6 +13,7 @@ type RadioInputEditProps = {
 
 const RadioInputEdit = ({ index, permissions, inputProps, setFieldValue }: RadioInputEditProps) => {
     const users = useAppSelector((state) => state.permissions.users);
+    const navigate = useNavigate();
 
     const addPermissionForField = (type: string) => {
         if (permissions.includes(type)) {
@@ -63,11 +65,15 @@ const RadioInputEdit = ({ index, permissions, inputProps, setFieldValue }: Radio
                     color="dark"
                     size="sm"
                 >
-                    {users.map((user) => (
+                    {users.length > 0 ? users.map((user) => (
                         <Dropdown.Item key={user.id} onClick={() => addPermissionForField(user.type)}>
                             {permissions.includes(user.type) ? `✔ ` : ``}{user.type}
                         </Dropdown.Item>
-                    ))}
+                    )) : (
+                        <Dropdown.Item onClick={() => navigate("/permissions/create")}>
+                            There are no permissions/roles. Click to add
+                        </Dropdown.Item>
+                    )}
                 </Dropdown>
             </div>
             <div className="flex flex-col p-4 mt-4 border border-gray-500 rounded-2xl w-full">

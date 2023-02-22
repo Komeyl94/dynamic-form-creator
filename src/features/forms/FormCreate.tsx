@@ -222,13 +222,15 @@ const FormCreate = () => {
                                                 gradientDuoTone="redToYellow"
                                             >
                                                 {
-                                                    services.map((service) => {
+                                                    services.length > 0 ? services.map((service) => {
                                                         return (
                                                             <Dropdown.Item key={service.id} onClick={() => addServiceToForm(service)}>
                                                                 {selectedServices.findIndex((s) => s.id === service.id) >= 0 ? `✔ ` : ``}{service.name}
                                                             </Dropdown.Item>
                                                         )
-                                                    })
+                                                    }) : <Dropdown.Item onClick={() => navigate("/services/create")}>
+                                                        There are no Services. Click to add
+                                                    </Dropdown.Item>
                                                 }
                                             </Dropdown>
                                         </div>

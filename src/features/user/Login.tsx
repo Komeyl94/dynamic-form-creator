@@ -11,7 +11,7 @@ const Login = () => {
     const navigate = useNavigate();
     const roles = useAppSelector((state) => state.permissions.users);
 
-    const initialValues: User = { email: "", role: "" };
+    const initialValues: User = { email: "", role: "admin" };
 
     return (
         <Formik
@@ -59,15 +59,21 @@ const Login = () => {
                                         <Select id="role" required placeholder="Enter your role" {...field}>
                                             <option value="">Select an option</option>
                                             {
-                                                roles.map((role) => {
+                                                roles.length > 0 ? roles.map((role) => {
                                                     return (
-                                                        <option value={role.type}>{role.type}</option>
+                                                        <option key={role.type} value={role.type}>{role.type}</option>
                                                     )
-                                                })
+                                                }) : (
+                                                    // First user is gonna be an admin
+                                                    // In order to test permission, login and then add user permissions/roles
+                                                    <option value="admin">Admin</option>
+                                                )
                                             }
                                         </Select>
                                     )}
                                 </Field>
+                                <small className="block">First user is gonna be an admin</small>
+                                <small className="block">In order to test field permissions, login and then add user permissions/roles</small>
                                 <ErrorMessage name="role" component="div" />
                             </div>
                             <Button type="submit" disabled={isSubmitting} className="mt-6" gradientDuoTone="greenToBlue" size="lg">

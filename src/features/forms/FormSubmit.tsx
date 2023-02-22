@@ -31,6 +31,7 @@ const FormShow = ({ initialValues, form, isFormEdit }: FormShowProps) => {
   const navigate = useNavigate();
   const formRef = useRef<FormikProps<FormSubmitData>>(null);
   const [isInitialServicesDone, setIsInitialServicesDone] = useState(false);
+  const user = useAppSelector((state) => state.user.profile);
 
   const callFakeService = (time: string, url: string) => new Promise((resolve) => {
     setTimeout(() => {
@@ -124,11 +125,19 @@ const FormShow = ({ initialValues, form, isFormEdit }: FormShowProps) => {
                       "checkbox": Checkbox,
                     };
                     const Component = components[field.type || "text"];
-                    return (
-                      <div key={field.label + index} className="my-3">
-                        <Component field={field} />
-                      </div>
-                    );
+                    if (user && user.role && ((field.permissions.length > 0 && field.permissions.includes(user.role)) || (field.permissions.length === 0))) {
+                      return (
+                        <div key={field.label + index} className="my-3">
+                          <Component field={field} />
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div key={field.label + index} className="my-3 text-xs bg-red-50 text-red-500 rounded-lg px-3 py-1.5">
+                          You dont have access to this field
+                        </div>
+                      )
+                    }
                   })
                 }
               </div>

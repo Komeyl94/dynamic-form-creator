@@ -1,6 +1,7 @@
 import { Checkbox, Dropdown, Label, TextInput } from "flowbite-react";
 import { Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../../app/hooks";
 import { camelCaseToNormal } from "../../../../utils/utilities";
 import { DateRangeInputProps } from "../../types";
@@ -21,6 +22,7 @@ const DateRangeInputEdit = ({ index, permissions, inputProps, setFieldValue }: D
     const defaultValidationValue = { min: inputProps.min || undefined, max: inputProps.max || undefined };
     const [validations, setValidations] = useState<Validations>(defaultValidationValue);
     const users = useAppSelector((state) => state.permissions.users);
+    const navigate = useNavigate();
 
     const addMin = () => {
         if (validations.min === undefined) {
@@ -126,11 +128,15 @@ const DateRangeInputEdit = ({ index, permissions, inputProps, setFieldValue }: D
                     color="dark"
                     size="sm"
                 >
-                    {users.map((user) => (
+                    {users.length > 0 ? users.map((user) => (
                         <Dropdown.Item key={user.id} onClick={() => addPermissionForField(user.type)}>
                             {permissions.includes(user.type) ? `✔ ` : ``}{user.type}
                         </Dropdown.Item>
-                    ))}
+                    )) : (
+                        <Dropdown.Item onClick={() => navigate("/permissions/create")}>
+                            There are no permissions/roles. Click to add
+                        </Dropdown.Item>
+                    )}
                 </Dropdown>
             </div>
             <div className={"flex flex-col p-4 mt-4 border border-gray-500 rounded-2xl w-full" + (Object.values(validations).every((val) => val === undefined) ? " hidden" : "")}>
