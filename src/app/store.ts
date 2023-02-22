@@ -2,6 +2,7 @@ import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/t
 import formsReducer from '../features/forms/formSlice';
 import permissionsReducer from '../features/permissions/permissionsSlice';
 import servicesReducer from '../features/services/servicesSlice';
+import userReducer from '../features/user/userSlice';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 
@@ -13,7 +14,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   forms: formsReducer,
   permissions: permissionsReducer,
-  services: servicesReducer
+  services: servicesReducer,
+  user: userReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

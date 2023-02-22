@@ -17,12 +17,17 @@ import PermissionsAdd from "./features/permissions/PermissionsCreate";
 import FormsSubmittedList from "./features/forms/FormsSubmittedList";
 import ServicesList from "./features/services/ServicesList";
 import ServicesCreate from "./features/services/ServicesCreate";
+import Login from "./features/user/Login";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     children: [
+      {
+        path: "/login",
+        element: <Login />
+      },
       {
         path: "/forms",
         element: <FormsList />

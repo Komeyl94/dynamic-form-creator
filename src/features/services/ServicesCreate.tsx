@@ -85,7 +85,7 @@ const ServicesCreate = () => {
                     <TextInput type="text" id="name" placeholder="Enter service name" {...field} />
                   )}
                 </Field>
-                <ErrorMessage name="type" component="div" />
+                <ErrorMessage name="name" component="div" />
               </div>
               <div>
                 <div className="mb-2 block">
@@ -115,6 +115,7 @@ const ServicesCreate = () => {
                     field,
                   }: FieldProps) => (
                     <Select id="time" placeholder="Enter service time" {...field}>
+                      <option value="">Select an option</option>
                       <option value="beforeInit">Before Form Initiation</option>
                       <option value="afterInit">After Form Initiation</option>
                       <option value="beforeSubmit">Before Form Submit</option>
