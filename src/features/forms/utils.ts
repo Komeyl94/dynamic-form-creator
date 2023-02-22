@@ -110,3 +110,8 @@ export const fieldNameGenerator = (
     return `${label.replaceAll(" ", "_").toLowerCase()}##${id}`;
   }
 };
+
+export const formatPatterns = [
+  {name: "Phone Number", pattern: "#### ### ## ##"},
+  {name: "Card Number", pattern: "#### #### #### ####"}
+]

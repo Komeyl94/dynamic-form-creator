@@ -1,13 +1,15 @@
-import { Button, Checkbox, Dropdown, Label, TextInput } from "flowbite-react";
+import { Checkbox, Dropdown, Label, TextInput } from "flowbite-react";
 import { Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
 import { useAppSelector } from "../../../../app/hooks";
 import { camelCaseToNormal } from "../../../../utils/utilities";
 import { TextNumberInputProps } from "../../types";
+import { formatPatterns } from "../../utils";
 
 type NumberInputEditProps = {
     index: number;
     permissions: string[];
+    formatting: string;
     inputProps: TextNumberInputProps;
     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
 }
@@ -17,7 +19,7 @@ type Validations = {
     max: number | undefined;
 }
 
-const NumberInputEdit = ({ index, permissions, inputProps, setFieldValue }: NumberInputEditProps) => {
+const NumberInputEdit = ({ index, permissions, formatting, inputProps, setFieldValue }: NumberInputEditProps) => {
     const defaultValidationValue = { min: inputProps.min || undefined, max: inputProps.max || undefined };
     const [validations, setValidations] = useState<Validations>(defaultValidationValue);
     const users = useAppSelector((state) => state.permissions.users);
@@ -47,6 +49,14 @@ const NumberInputEdit = ({ index, permissions, inputProps, setFieldValue }: Numb
             setFieldValue(`fields[${index}].permissions`, permissions.filter(p => p !== type));
         } else {
             setFieldValue(`fields[${index}].permissions`, [...permissions, type]);
+        }
+    }
+
+    const addFormattingForField = (pattern: string) => {
+        if (formatting === pattern) {
+            setFieldValue(`fields[${index}].formatting`, "");
+        } else {
+            setFieldValue(`fields[${index}].formatting`, pattern);
         }
     }
 
@@ -109,7 +119,20 @@ const NumberInputEdit = ({ index, permissions, inputProps, setFieldValue }: Numb
                         {validations.max !== undefined ? `✔ ` : ``}Maximum number
                     </Dropdown.Item>
                 </Dropdown>
-                <Button color="dark" size="sm" pill={true} className="mx-1">+ Add Formatting</Button>
+                <div className="mx-1"></div>
+                <Dropdown
+                    label={formatting ? `Format: ${formatPatterns.find((f) => f.pattern === formatting)?.name}` : `Select Formatting`}
+                    pill={true}
+                    color="dark"
+                    size="sm"
+                >
+                    {formatPatterns.map((format) => (
+                        <Dropdown.Item key={format.name + format.pattern} onClick={() => addFormattingForField(format.pattern)}>
+                            {formatting === format.pattern ? `✔ ` : ``}{`${format.name} - ${format.pattern}`}
+                        </Dropdown.Item>
+                    ))}
+                </Dropdown>
+                <div className="mx-1"></div>
                 <Dropdown
                     label={`${permissions.length > 0 ? `(${permissions.length})` : 'Select'} Permissions`}
                     pill={true}
