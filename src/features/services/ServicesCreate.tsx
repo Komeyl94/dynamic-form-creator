@@ -45,7 +45,7 @@ const ServicesCreate = () => {
         const serviceNames = services.map(user => user.name);
         if (!values.name) {
           errors.name = "Enter a service name"
-        } else if (serviceNames.indexOf(values.name) >= 0) {
+        } else if (!isEdit && serviceNames.indexOf(values.name) >= 0) {
           errors.name = "Service already exists"
         } else if (!values.url) {
           errors.url = "Enter a service url"

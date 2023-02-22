@@ -112,7 +112,6 @@ const FormCreate = () => {
         <Formik
             innerRef={formRef}
             initialValues={initialValues}
-            enableReinitialize
             validate={values => {
                 const errors = {};
                 return errors;

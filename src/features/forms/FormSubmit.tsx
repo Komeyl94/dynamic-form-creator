@@ -51,6 +51,8 @@ const FormShow = ({ initialValues, form, isFormEdit }: FormShowProps) => {
             callFakeService(form.services[afterInitIndex].time, form.services[afterInitIndex].url);
           }
         });
+      } else {
+        setIsInitialServicesDone(true);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,31 +69,38 @@ const FormShow = ({ initialValues, form, isFormEdit }: FormShowProps) => {
     resolve(true);
   })
 
-  const onFormSubmit = async (values: FormSubmitData, { setSubmitting }: FormikHelpers<FormSubmitData>) => {
+  const setFormDates = async () => {
+    if (formRef.current && formRef.current.values) {
+      const now = new Date().valueOf().toString();
+      formRef.current.setFieldValue("updated_date", now);
+      if (!formRef.current.values.created_date) {
+        formRef.current.setFieldValue("created_date", now);
+      }
+    }
+  }
+
+  const onFormSubmit = async (_: FormSubmitData, { setSubmitting }: FormikHelpers<FormSubmitData>) => {
+    setSubmitting(true);
     if (form.services) {
       const beforeSubmitIndex = form.services.findIndex((service) => service.time === "beforeSubmit");
       if (form.services && beforeSubmitIndex !== -1) {
         await callFakeService(form.services[beforeSubmitIndex].time, form.services[beforeSubmitIndex].url);
       }
     }
-    const now = new Date().valueOf().toString();
-    values.updated_date = now;
-    if (!values.created_date) {
-      values.created_date = now;
-    }
 
-    saveData().then(() => {
+    await setFormDates();
+
+    await saveData().then(() => {
       if (form.services) {
         const afterSubmitIndex = form.services.findIndex((service) => service.time === "afterSubmit");
         if (form.services && afterSubmitIndex !== -1) {
-          callFakeService(form.services[afterSubmitIndex].time, form.services[afterSubmitIndex].url).then(() => {
-            setSubmitting(false);
-            navigate(-1);
-          });
+          callFakeService(form.services[afterSubmitIndex].time, form.services[afterSubmitIndex].url);
         }
       }
-    })
-
+    });
+    
+    setSubmitting(false);
+    navigate(-1);
   }
 
   if (isInitialServicesDone) {

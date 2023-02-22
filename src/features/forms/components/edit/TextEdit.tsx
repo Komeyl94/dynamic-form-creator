@@ -1,10 +1,9 @@
 import { Checkbox, Dropdown, Label, TextInput } from "flowbite-react";
 import { Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../../../app/hooks";
 import { camelCaseToNormal } from "../../../../utils/utilities";
 import { TextNumberInputProps } from "../../types";
+import PermissionsDropdown from "../PermissionsDropdown";
 
 type TextInputEditProps = {
     index: number;
@@ -21,8 +20,6 @@ type Validations = {
 const TextInputEdit = ({ index, permissions, inputProps, setFieldValue }: TextInputEditProps) => {
     const defaultValidationValue = { minLength: inputProps.minLength || undefined, maxLength: inputProps.maxLength || undefined };
     const [validations, setValidations] = useState<Validations>(defaultValidationValue);
-    const users = useAppSelector((state) => state.permissions.users);
-    const navigate = useNavigate();
 
     const addMinLength = () => {
         if (validations.minLength === undefined) {
@@ -41,14 +38,6 @@ const TextInputEdit = ({ index, permissions, inputProps, setFieldValue }: TextIn
         } else {
             setValidations({ ...validations, maxLength: undefined });
             setFieldValue(`fields[${index}].inputProps.maxLength`, undefined);
-        }
-    }
-
-    const addPermissionForField = (type: string) => {
-        if (permissions.includes(type)) {
-            setFieldValue(`fields[${index}].permissions`, permissions.filter(p => p !== type));
-        } else {
-            setFieldValue(`fields[${index}].permissions`, [...permissions, type]);
         }
     }
 
@@ -111,22 +100,7 @@ const TextInputEdit = ({ index, permissions, inputProps, setFieldValue }: TextIn
                         {validations.maxLength !== undefined ? `✔ ` : ``}Maximum character length
                     </Dropdown.Item>
                 </Dropdown>
-                <Dropdown
-                    label={`${permissions.length > 0 ? `(${permissions.length})` : 'Select'} Permissions`}
-                    pill={true}
-                    color="dark"
-                    size="sm"
-                >
-                    {users.length > 0 ? users.map((user) => (
-                        <Dropdown.Item key={user.id} onClick={() => addPermissionForField(user.type)}>
-                            {permissions.includes(user.type) ? `✔ ` : ``}{user.type}
-                        </Dropdown.Item>
-                    )) : (
-                        <Dropdown.Item onClick={() => navigate("/permissions/create")}>
-                            There are no permissions/roles. Click to add
-                        </Dropdown.Item>
-                    )}
-                </Dropdown>
+                <PermissionsDropdown index={index} permissions={permissions} />
             </div>
             <div className={"flex flex-col p-4 mt-4 border border-gray-500 rounded-2xl w-full" + (Object.values(validations).every((val) => val === undefined) ? " hidden" : "")}>
                 <p className="font-medium text-sm">Validations</p>
