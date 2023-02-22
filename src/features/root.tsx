@@ -1,3 +1,4 @@
+import { Button } from "flowbite-react";
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -30,22 +31,22 @@ const Root = () => {
                                     <p className="text-xs font-medium">{user.role}</p>
                                 </li>
                                 <li>
-                                    <a href={`/forms`}>Forms</a>
+                                    <Button color="light" className="w-full" onClick={() => navigate(`/forms`)}>Forms</Button>
                                 </li>
                                 <li>
-                                    <a href={`/services`}>Services</a>
+                                    <Button color="light" className="w-full" onClick={() => navigate(`/services`)}>Services</Button>
                                 </li>
                                 <li>
-                                    <a href={`/permissions`}>Permissions</a>
+                                    <Button color="light" className="w-full" onClick={() => navigate(`/permissions`)}>Permissions</Button>
                                 </li>
                                 <li>
-                                    <a onClick={logoutUser} href="/login" className="bg-red-100 !text-red-700 font-bold">Logout</a>
+                                    <Button color="light" onClick={logoutUser} className="bg-red-100 !text-red-700 font-bold w-full">Logout</Button>
                                 </li>
                             </ul>
                         ) : (
                             <ul>
                                 <li>
-                                    <a href={`/login`}>Login</a>
+                                    <Button color="light" className="w-full" onClick={() => navigate(`/login`)}>Login</Button>
                                 </li>
                             </ul>
                         )

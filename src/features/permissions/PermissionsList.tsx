@@ -1,9 +1,11 @@
 import { Button, Table } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { deletePermission } from "./permissionsSlice";
 
 const PermissionsList = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const users = useAppSelector((state) => state.permissions.users);
 
     const removePermission = (id: string) => {
@@ -12,7 +14,7 @@ const PermissionsList = () => {
 
     if (users) {
         return (<div>
-            <Button outline={true} gradientDuoTone="cyanToBlue" className="mb-4" href="/permissions/create">Add User Permission</Button>
+            <Button outline={true} gradientDuoTone="cyanToBlue" className="mb-4" onClick={() => navigate("/permissions/create")}>Add User Permission</Button>
             <Table hoverable={true}>
                 <Table.Head>
                     <Table.HeadCell>
@@ -39,12 +41,12 @@ const PermissionsList = () => {
                                         {user.type}
                                     </Table.Cell>
                                     <Table.Cell>
-                                        <a
-                                            href={`/permissions/edit/${user.id}`}
-                                            className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                                        <span
+                                            onClick={() => navigate(`/permissions/edit/${user.id}`)}
+                                            className="font-medium cursor-pointer mx-2 text-blue-600 hover:underline dark:text-blue-500"
                                         >
                                             Edit
-                                        </a>
+                                        </span>
                                         <span
                                             onClick={() => removePermission(user.id)}
                                             className="font-medium cursor-pointer mx-2 text-blue-600 hover:underline dark:text-blue-500"
@@ -61,7 +63,7 @@ const PermissionsList = () => {
         </div>);
     }
     return (<div>
-        <Button outline={true} gradientDuoTone="cyanToBlue" href="/permissions/create">Add User Permission</Button>
+        <Button outline={true} gradientDuoTone="cyanToBlue" onClick={() => navigate("/permissions/create")}>Add User Permission</Button>
         <p>No User Permission Found!</p>
     </div>);
 }

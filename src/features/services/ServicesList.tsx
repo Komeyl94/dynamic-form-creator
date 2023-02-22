@@ -1,10 +1,12 @@
 import { Button, Table } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { camelCaseToNormal } from "../../utils/utilities";
 import { deleteService } from "./servicesSlice";
 
 const ServicesList = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const list = useAppSelector((state) => state.services.list);
 
     const removeService = (id: string) => {
@@ -14,7 +16,7 @@ const ServicesList = () => {
     if (list) {
         return (
             <div>
-                <Button outline={true} gradientDuoTone="cyanToBlue" className="mb-4" href="/services/create">Add Service</Button>
+                <Button outline={true} gradientDuoTone="cyanToBlue" className="mb-4" onClick={() => navigate("/services/create")}>Add Service</Button>
                 <Table hoverable={true}>
                     <Table.Head>
                         <Table.HeadCell>
@@ -53,12 +55,12 @@ const ServicesList = () => {
                                             {camelCaseToNormal(service.time)}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            <a
-                                                href={`/services/edit/${service.id}`}
+                                            <span
+                                                onClick={() => navigate(`/services/edit/${service.id}`)}
                                                 className="font-medium text-blue-600 hover:underline dark:text-blue-500"
                                             >
                                                 Edit
-                                            </a>
+                                            </span>
                                             <span
                                                 onClick={() => removeService(service.id)}
                                                 className="font-medium cursor-pointer mx-2 text-blue-600 hover:underline dark:text-blue-500"
@@ -77,7 +79,7 @@ const ServicesList = () => {
     }
     return (
         <div>
-            <Button outline={true} gradientDuoTone="cyanToBlue" href="/services/create">Add Service</Button>
+            <Button outline={true} gradientDuoTone="cyanToBlue" onClick={() => navigate("/services/create")}>Add Service</Button>
             <p>No Service Found!</p>
         </div>
     );

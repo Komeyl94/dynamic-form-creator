@@ -83,7 +83,7 @@ const FormsSubmittedList = () => {
     </div>);
   }
   return (<div>
-    <Button outline={true} gradientDuoTone="cyanToBlue" href="/forms/add">Add Form</Button>
+    <Button outline={true} gradientDuoTone="cyanToBlue" onClick={() => navigate("/forms/add")}>Add Form</Button>
     <p>No Form Found!</p>
   </div>);
 }

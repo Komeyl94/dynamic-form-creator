@@ -23,7 +23,7 @@ const FormsList = () => {
   if (forms) {
     return (
       <div>
-        <Button outline={true} gradientDuoTone="cyanToBlue" className="mb-4" href="/forms/add">Add Form</Button>
+        <Button outline={true} gradientDuoTone="cyanToBlue" className="mb-4" onClick={() => navigate("/forms/add")}>Add Form</Button>
         <Table hoverable={true}>
           <Table.Head>
             <Table.HeadCell>
@@ -56,12 +56,12 @@ const FormsList = () => {
                       {form.description}
                     </Table.Cell>
                     <Table.Cell>
-                      <a
-                        href={`/forms/edit/${form.id}`}
-                        className="font-medium text-blue-600 mx-3 hover:underline dark:text-blue-500"
+                      <span
+                        onClick={() => navigate(`/forms/edit/${form.id}`)}
+                        className="font-medium cursor-pointer mx-3 text-blue-600 hover:underline dark:text-blue-500"
                       >
                         Edit
-                      </a>
+                      </span>
                       <span
                         onClick={() => submitForm(form.id)}
                         className="font-medium cursor-pointer mx-3 text-blue-600 hover:underline dark:text-blue-500"
@@ -92,7 +92,7 @@ const FormsList = () => {
   }
   return (
     <div>
-      <Button outline={true} gradientDuoTone="cyanToBlue" href="/forms/add">Add Form</Button>
+      <Button outline={true} gradientDuoTone="cyanToBlue" onClick={() => navigate("/forms/add")}>Add Form</Button>
       <p>No Form Found!</p>
     </div>
   );
