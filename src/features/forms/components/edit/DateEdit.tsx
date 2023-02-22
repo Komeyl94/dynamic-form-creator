@@ -1,4 +1,4 @@
-import { Button, Checkbox, Dropdown, Label, TextInput } from "flowbite-react";
+import { Checkbox, Dropdown, Label, TextInput } from "flowbite-react";
 import { Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
 import { useAppSelector } from "../../../../app/hooks";
@@ -109,7 +109,7 @@ const DateInputEdit = ({ index, permissions, inputProps, setFieldValue }: DateIn
                         {validations.max !== undefined ? `✔ ` : ``}Maximum date
                     </Dropdown.Item>
                 </Dropdown>
-                <Button color="dark" size="sm" pill={true} className="mx-1">+ Add Formatting</Button>
+                <div className="mx-1"></div>
                 <Dropdown
                     label={`${permissions.length > 0 ? `(${permissions.length})` : 'Select'} Permissions`}
                     pill={true}
